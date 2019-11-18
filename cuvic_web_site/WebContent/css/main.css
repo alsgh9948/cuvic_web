@@ -1,0 +1,103 @@
+@charset "UTF-8";
+body {
+	margin: 0;
+}
+.wrapper{
+	width: 1000px;
+	margin: auto;
+}
+.zeta-menu-bar {
+	background: #9ed7c4;
+	display: inline-block;
+	width: 100%;
+}
+
+.zeta-menu {
+	margin: 0;
+	padding: 0;
+}
+
+.zeta-menu li{
+	float: left;
+	list-style: none;
+	position: relative;
+}
+.zeta-menu li:hover>a {
+	background: white;
+	color: #9ed7c4;
+	text-decoration:none
+}
+
+.zeta-menu a {
+	color: white;
+	display: block;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+
+.zeta-menu ul {
+	background: #eee;
+	border: 1px solid silver;
+	display: none;
+	padding: 0;
+	position: absolute;
+	left: 0;
+	top: 100%;
+	width: 180px;
+}
+
+.zeta-menu ul li {
+	float: none;
+}
+
+.zeta-menu ul li:hover {
+	background: #ddd;
+}
+
+.zeta-menu ul li:hover a {
+	color: black;
+}
+
+.zeta-menu ul a {
+	color: black;
+}
+
+.zeta-menu ul ul {
+	left: 100%;
+	top: 0;
+}
+
+.zeta-menu ul ul li {
+	float: left;
+	margin-right: 10px;
+}
+  .slider img {
+  	margin:auto;
+  	width: 700px;
+  	height: 380px;
+  }
+  #login_before, #login_after, #event_list, #new_post{
+  	margin:10px auto;
+  	width: 28%;
+  	border: solid 2px #e5e5e5;
+  	height: 220px;
+  	float:left;
+  }
+  #new_post
+  {
+  	height: 400px;	
+  }
+  #contents{
+  	margin:10px auto;
+  	width: 70%;
+  	border: solid 2px #e5e5e5;
+  	height: 460px;
+  	padding:5px 30px 5px 35px;
+  	float:right;
+  }
+  #footer{
+  	background-color: #9ed7c4;
+  	height: 100px;
+  	clear: 	both;
+  }
+}
