@@ -144,7 +144,7 @@
 				<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	  			<form action="controller.jsp">
 	  				<input type="hidden" name="action" value="load_member_picture">
-	  				<input tiype="hidden" name="club_num" value="1~5">
+	  				<input type="hidden" name="club_num" value="1~5">
 	  			</form>
 	  			<script>
 	  				function load_picture(num)

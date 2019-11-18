@@ -69,8 +69,8 @@
 </style>
 
 <script>
+var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 	$(document).ready(function() {
-		var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 		if(nick_name != "null")
 		{
 	        document.getElementById("login_before").style.display="none";
@@ -83,10 +83,6 @@
 			{
 	        document.getElementById("_hidden").style.display="inline-block";
 	        document.getElementById("_hidden").style.visibility="visible";
-			for(var i = 0 ; $("input:checkbox[name=select_element]").length ; i++)
-				{
-				document.getElementsByName("select_element")[i].display="inline-block";
-				}
 			}
 	});
 	$(function() {
@@ -112,10 +108,20 @@
 			{
 		%>
 		count = <%=count%>;
-		 $('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
+		if(nick_name != "cuvic_web_master")
+		 {
+			$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
 					+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
 					+"<span class='datail_text' ><%=list[3]%></sapn>"
-					+"<input type='checkbox' style='display:none;' name='select_element' value='<%=count++%>'></div>");
+					+"&nbsp;<input type='checkbox' style='display:none;' name='select_element' value='<%=count++%>'></div>");
+		 }
+		else
+			{
+			$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
+					+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
+					+"<span class='datail_text' ><%=list[3]%></sapn>"
+					+"&nbsp;<input type='checkbox' name='select_element' value='<%=count++%>'></div>");
+			}
 		<%
 			}
 		%>
