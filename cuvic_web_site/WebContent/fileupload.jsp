@@ -38,7 +38,7 @@
       MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType);
       String id = (String)multi.getParameter("user_id");
       String gender = (String)multi.getParameter("user_gender");
-
+	  System.out.println(gender);
       Enumeration<?> files = multi.getFileNames();
       String file1 = (String) files.nextElement();
       filename1 = multi.getFilesystemName(file1);

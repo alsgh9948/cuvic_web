@@ -4,7 +4,7 @@
 <html>
 <head>
 
-<jsp:useBean id="list" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="info_list" scope="request" class="java.util.ArrayList" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,13 +38,13 @@
 #contents th{
 	width:50px;
 }
-#a li{
+.a li{
 	display:block;
 	float:left;
 	padding: 10px 20px;
 	text-decoration: none;
 }
-#a li:hover>a{
+.a li:hover>a{
 	color:pink;
 	text-decoration: none;
 }
@@ -77,11 +77,61 @@
     $(document).ready(function(){
       $('.slider').bxSlider();
     });
+    var now_page = "1";
+		function load_picture()
+			{
+				<%
+				int n = 0,cnt=0;
+				for(String[] list : (ArrayList<String[]>)info_list)
+				{
+					if(cnt%4 == 0)
+					{
+						n++;
+						if(n < 2)
+						{
+							%>$('#contents').append("<div id='group_<%=n%>' style='display:block; visibility:visible;'></div>")<%;
+						}
+						else
+						{
+							%>$('#contents').append("<div id='group_<%=n%>' style='display:none;visibility:hidden'></div>")<%;
+						}	
+					}
+					cnt++;
+					%>
+					$('#group_<%=n%>').append("<table style='margin:auto; width:550px; margin-top: 20px;'>"
+	 							         +"<tr><td rowspan='3'align='center' width='30%'><img src='user_img/<%=list[0]%>' style='padding:10px 0 10px 0; max-width: auto; height: 188px;'></td>"
+  										 +"<td width='20%''>이름 : <%=list[1]%></td>"
+ 				 						 +"<td width='20%''>기수 : <%=list[2]%>기</td>"
+  										 +"<td rowspan='3'><p>한마디</p><p><%=list[5]%></p></td></tr>"
+										 +"<tr><td colspan='2'>Email : <%=list[3]%></td></tr>"
+  										 +"<tr><td colspan='2'>근무지 : <%=list[4]%></td></tr>	</table>");
+					<%
+				}
+				%>
+				$('#contents').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
+				<%
+				for(int i = 1 ; i <= n ; i++)
+				{
+					%>
+						$('#page_button').append("<li style='float: left; list-style:none'><a  href='javascript:void(0);' onclick='move_page(\"<%=i%>\")'> <%=i%></a></li>");
+					<%
+				}
+				%>
+			}
+		function move_page(num)
+		{
+	        document.getElementById("group_"+now_page).style.display="none";
+	        document.getElementById("group_"+now_page).style.visibility="hidden";
+	        
+	        document.getElementById("group_"+num).style.display="block";
+	        document.getElementById("group_"+num).style.visibility="visible";
+	        now_page=num;
+		}
 </script>
 <title>CUVIC</title>
 </head>
 
-<body>
+<body onload="load_picture()">
 	<div class="wrapper">
 		<div id=user_info align="right">
 			<table>
@@ -100,13 +150,13 @@
 							<ul>
 								<li><a href="introduce.jsp">동아리 소개</a></li>
 								<li><a href="controller.jsp?&action=load_active_record">주요활동ㆍ실적</a></li>
-								<li><a href="controller.jsp?action=load_info">동아리 회원</a>
+								<li><a href="controller.jsp?action=load_info&group=1">동아리 회원</a>
 									<ul>
-										<li><a href="#">1~5기</a></li>
-										<li><a href="#">6~10기</a></li>
-										<li><a href="#">11~15기</a></li>
-										<li><a href="#">16~20기</a></li>
-										<li><a href="#">21기~</a></li>
+										<li><a href="controller.jsp?action=load_info&group=1">1~5기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=2">6~10기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=3">11~15기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=4">16~20기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=5">21기~</a></li>
 									</ul></li>
 							</ul></li>
 						<li><a href="controller.jsp?&action=load_picture_board">사진첩</a></li>
@@ -132,26 +182,19 @@
 				</div>
 			</div>
 	  		<div id="contents" style="height: 880px;">
-	  			<ul id="a">
-	  				<li><a href="#a" onclick="load_picture('1~5')">1기~5기</a></li>
-	  				<li><a href="#a">6기~10기</a></li>
-	  				<li><a href="#a">11기~15기</a></li>
-	  				<li><a href="#a">16기~20기</a></li>
-	  				<li><a href="#a">21기~</a></li>
+	  			<ul class="a">
+					<li><a href="controller.jsp?action=load_info&group=1">1~5기</a></li>
+					<li><a href="controller.jsp?action=load_info&group=2">6~10기</a></li>
+					<li><a href="controller.jsp?action=load_info&group=3">11~15기</a></li>
+					<li><a href="controller.jsp?action=load_info&group=4">16~20기</a></li>
+					<li><a href="controller.jsp?action=load_info&group=5">21기~</a></li>
 	  			</ul>
-	  			<table style="margin-left:-11px; width:650px;" id="1~5">
-	  			</table>
+	  			
 				<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	  			<form action="controller.jsp">
 	  				<input type="hidden" name="action" value="load_member_picture">
 	  				<input type="hidden" name="club_num" value="1~5">
 	  			</form>
-	  			<script>
-	  				function load_picture(num)
-	  				{
-	  							
-	  				}
-	  			</script>
 	  		</div>
 	  		<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>

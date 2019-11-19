@@ -132,23 +132,23 @@ public class db_control {
 		}
 		return true;
 	}
-	public ArrayList<String[]> load_info()
+	public ArrayList<String[]> load_info(String group)
 	{
 		// 입력한 아이디가 이미 user 테이블에 있는지 검사
-		sql = "select * from user_list order by club_num, name";
+		int num = Integer.parseInt(group);
+		sql = "select * from user_list where club_num between "+ (5*num-4) +" and "+ num*5 +" order by club_num, name";
 		ArrayList<String[]> user_list = new ArrayList<String[]>();
 		connect();
 		try {
 			rs = st.executeQuery(sql);
 			while(rs.next()) {
 				String[] term_list = new String[7];
-				term_list[0] = rs.getString("club_num");
+				term_list[0] = rs.getString("img_name");
 				term_list[1] = rs.getString("name");
-				term_list[2] = rs.getString("email");
-				term_list[3] = rs.getString("work_place");
-				term_list[4] = rs.getString("comment");
-				term_list[5] = rs.getString("img_name");
-				term_list[6] = rs.getString("open_state");
+				term_list[2] = rs.getString("club_num");
+				term_list[3] = rs.getString("email");
+				term_list[4] = rs.getString("work_place");
+				term_list[5] = rs.getString("comment");
 				user_list.add(term_list);
 			}
 			rs.close();

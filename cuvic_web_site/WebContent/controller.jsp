@@ -60,8 +60,9 @@ response.setContentType("text/html;charset=UTF-8");
 	else if(action.equals("load_info"))
 	{
 		String id = (String)session.getAttribute("id");
-	 	ArrayList<String[]> list = db.load_info();
-	 	request.setAttribute("list", list);
+		String group = (String)request.getParameter("group");
+	 	ArrayList<String[]> list = db.load_info(group);
+	 	request.setAttribute("info_list", list);
      	pageContext.forward("member.jsp");
 	}
 	else if(action.equals("load_active_record"))

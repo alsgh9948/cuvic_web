@@ -79,7 +79,7 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 	        document.getElementById("login_after").style.display="inline-block";
 	        document.getElementById("login_after").style.visibility="visible";
 		}
-		if(nick_name == "cuvic_web_master")
+		if(nick_name == "WebMaster")
 			{
 	        document.getElementById("_hidden").style.display="inline-block";
 	        document.getElementById("_hidden").style.visibility="visible";
@@ -108,7 +108,7 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			{
 		%>
 		count = <%=count%>;
-		if(nick_name != "cuvic_web_master")
+		if(nick_name != "WebMaster")
 		 {
 			$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
 					+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
@@ -213,13 +213,13 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 							<ul>
 								<li><a href="introduce.jsp">동아리 소개</a></li>
 								<li><a href="controller.jsp?&action=load_active_record">주요활동ㆍ실적</a></li>
-								<li><a href="controller.jsp?action=load_info">동아리 회원</a>
+									<li><a href="controller.jsp?action=load_info&group=1">동아리 회원</a>
 									<ul>
-										<li><a href="#">1~5기</a></li>
-										<li><a href="#">6~10기</a></li>
-										<li><a href="#">11~15기</a></li>
-										<li><a href="#">16~20기</a></li>
-										<li><a href="#">21기~</a></li>
+										<li><a href="controller.jsp?action=load_info&group=1">1~5기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=2">6~10기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=3">11~15기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=4">16~20기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=5">21기~</a></li>
 									</ul></li>
 							</ul></li>
 						<li><a href="controller.jsp?&action=load_picture_board">사진첩</a></li>

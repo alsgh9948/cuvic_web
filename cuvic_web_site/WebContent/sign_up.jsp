@@ -170,8 +170,15 @@ response.setContentType("text/html;charset=UTF-8");
    			}
    		}
 		document.getElementsByName("user_id")[0].value = document.getElementsByName("id")[0].value
-		document.getElementsByName("user_gender")[0].value = document.getElementsByName("gender")[0].value
-   		document.getElementById("email").value = document.getElementById("Email").value + "@" + document.getElementById("Addr").value;
+		if(document.getElementsByName("gender").checked)
+		{
+			document.getElementsByName("user_gender")[0].value = "m";
+		}
+		else
+		{
+			document.getElementsByName("user_gender")[0].value = "w";
+		}
+		document.getElementById("email").value = document.getElementById("Email").value + "@" + document.getElementById("Addr").value;
    		document.getElementById("sign").submit();
    		document.getElementById("img").submit();
    	}
@@ -202,13 +209,13 @@ response.setContentType("text/html;charset=UTF-8");
 							<ul>
 								<li><a href="introduce.jsp">동아리 소개</a></li>
 								<li><a href="controller.jsp?&action=load_active_record">주요활동ㆍ실적</a></li>
-								<li><a href="controller.jsp?action=load_info">동아리 회원</a>
+								<li><a href="controller.jsp?action=load_info&group=1">동아리 회원</a>
 									<ul>
-										<li><a href="#">1~5기</a></li>
-										<li><a href="#">6~10기</a></li>
-										<li><a href="#">11~15기</a></li>
-										<li><a href="#">16~20기</a></li>
-										<li><a href="#">21기~</a></li>
+										<li><a href="controller.jsp?action=load_info&group=1">1~5기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=2">6~10기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=3">11~15기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=4">16~20기</a></li>
+										<li><a href="controller.jsp?action=load_info&group=5">21기~</a></li>
 									</ul></li>
 							</ul></li>
 						<li><a href="controller.jsp?&action=load_picture_board">사진첩</a></li>
