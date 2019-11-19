@@ -13,6 +13,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -70,6 +73,62 @@
 
 <script>
 var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
+function load_list(){
+	<%
+    	int count = 0;
+		for(String[] list : (ArrayList<String[]>)active_record_list)
+		{
+	%>
+	if(nick_name != "WebMaster")
+	 {
+		$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
+				+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
+				+"<span class='datail_text' ><%=list[3]%></sapn>"
+				+"&nbsp;<input type='checkbox' style='display:none;' name='select_element' value='<%=count%>'></div>");
+	 }
+	else
+		{
+		$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
+				+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
+				+"<span class='datail_text' ><%=list[3]%></sapn>"
+				+"&nbsp;<input type='checkbox' name='select_element' value='<%=count%>'></div>");
+		}
+	<%count++;%>
+	<%
+		}
+	%>
+}
+function load_css(){
+	var style = document.createElement('style');
+	style.innerHTML = ".detail .detail_text {"
+			  				+"visibility: hidden;"
+			  				+"width: 120px;"
+			  				+"background-color: #555;"
+		  					+"color: #fff;"
+		  					+"text-align: center;"
+		  					+"border-radius: 6px;"
+		  					+"padding: 5px 0;"
+		  					+"position: absolute;"
+		  					+"z-index: 1;"
+		  					+"bottom: 125%;"
+		  					+"left: 50%;"
+		  					+"margin-left: -60px;"
+		  					+"opacity: 0;"
+		  					+"transition: opacity 0.3s;}"
+		  				+".detail .detail_text::after {"
+		  					+"content: '';"
+		  					+"position: absolute;"
+		  					+"top: 100%;"
+		  					+"left: 50%;"
+		  					+"margin-left: -5px;"
+		  					+"border-width: 5px;"
+		  					+"border-style: solid;"
+		  					+"border-color: #555 transparent transparent transparent;}"
+		  				+".detail:hover .detail_text {"
+		  				  	+"visibility: visible;"
+		  				  	+"opacity: 1;}"
+	document.body.appendChild(style);
+}
 	$(document).ready(function() {
 		if(nick_name != "null")
 		{
@@ -86,6 +145,11 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			}
 	});
 	$(function() {
+		$.datepicker.setDefaults({
+		    dateFormat: 'yy-mm-dd' //Input Display Format 변경
+		});
+
+		$("#upload_date").datepicker();
 		$(".zeta-menu li").hover(function() {
 			$('ul:first', this).show();
 		}, function() {
@@ -100,64 +164,9 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
     $(document).ready(function(){
       $('.slider').bxSlider();
     });
-	var count = 0;
-    function load_list(){
-    	<%
-	    	int count = 0;
-			for(String[] list : (ArrayList<String[]>)active_record_list)
-			{
-		%>
-		count = <%=count%>;
-		if(nick_name != "WebMaster")
-		 {
-			$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
-					+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
-					+"<span class='datail_text' ><%=list[3]%></sapn>"
-					+"&nbsp;<input type='checkbox' style='display:none;' name='select_element' value='<%=count++%>'></div>");
-		 }
-		else
-			{
-			$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
-					+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
-					+"<span class='datail_text' ><%=list[3]%></sapn>"
-					+"&nbsp;<input type='checkbox' name='select_element' value='<%=count++%>'></div>");
-			}
-		<%
-			}
-		%>
-    }
-    function load_css(){
-    	var style = document.createElement('style');
-		style.innerHTML = ".detail .detail_text {"
-				  				+"visibility: hidden;"
-				  				+"width: 120px;"
-				  				+"background-color: #555;"
-			  					+"color: #fff;"
-			  					+"text-align: center;"
-			  					+"border-radius: 6px;"
-			  					+"padding: 5px 0;"
-			  					+"position: absolute;"
-			  					+"z-index: 1;"
-			  					+"bottom: 125%;"
-			  					+"left: 50%;"
-			  					+"margin-left: -60px;"
-			  					+"opacity: 0;"
-			  					+"transition: opacity 0.3s;}"
-			  				+".detail .detail_text::after {"
-			  					+"content: '';"
-			  					+"position: absolute;"
-			  					+"top: 100%;"
-			  					+"left: 50%;"
-			  					+"margin-left: -5px;"
-			  					+"border-width: 5px;"
-			  					+"border-style: solid;"
-			  					+"border-color: #555 transparent transparent transparent;}"
-			  				+".detail:hover .detail_text {"
-			  				  	+"visibility: visible;"
-			  				  	+"opacity: 1;}"
-		document.body.appendChild(style);
-    }
+
 	function add(){
+		var count = $("input[name=select_element]").length-1;
 		var title = document.getElementById("upload_title").value;
 		var member = document.getElementById("upload_member").value;
 		var date = document.getElementById("upload_date").value;
@@ -168,22 +177,20 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 		document.getElementsByName("date")[0].value = date;
 		document.getElementsByName("detail")[0].value = detail;
 		
-		alert(title);
 		$('#active').append("<div class='detail' id='select_"+(++count)+"' style='margin-right:5px;'>&nbsp"
-							+date+"&nbsp<span id='title'>"+title+"</span><span class='datail_text'></sapn> <input type='checkbox' name='select_element' value='"+count+++"'></div>");	
-
+							+date+"&nbsp<span id='title'>"+title+"</span><span class='datail_text'></sapn> <input type='checkbox' name='select_element' value='"+count+"'></div>");	
 		document.getElementById("upload_title").value = "";
 		document.getElementById("upload_member").value = "";
 		document.getElementById("upload_date").value = "";
 		document.getElementById("upload_detail").value = "";
-		
 		document.getElementById("form1").submit();
 	}
     function modify_data(){
     	var select_element = document.getElementsByName("select_element");
 		var list = "";
-    	for(var i = 0 ; i < <%=count%> ; i++){
-    		if(select_element[i].checked)
+		var loof_size = $("input[name=select_element]").length;
+    	for(var i = 0 ; i < loof_size; i++){
+    		if(select_element[i].checked == true)
     		{
     			list += "'"+$("#select_"+i+"> #title").html()+"',";
     		}
@@ -200,7 +207,7 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			<table>
 				<tr>
 					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()"">로그아웃</button></td>
+					<td><button onclick="logout()">로그아웃</button></td>
 				</tr>
 			</table>
 				<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
@@ -257,7 +264,7 @@ var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 					<p style="font-weight: bold; font-size:20px; display: inline;">주요활동</p>
 				</div>
 			<div id="_hidden" style="display:none; visibility:hidden;">
-				<input type="date" id="upload_date"><br>
+				<input type="text" id="upload_date" name="upload_date"><br>
 				<input type="text" size="73" id="upload_title"><br> <input type="text" size="73" id="upload_member"><br>
 				<textarea cols="75" rows="11" name=text id="upload_detail"></textarea>
 				<button onclick="modify_data()">삭제하기</button>

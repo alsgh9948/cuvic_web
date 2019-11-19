@@ -13,6 +13,9 @@ response.setContentType("text/html;charset=UTF-8");
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/main.css?version=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -48,6 +51,11 @@ response.setContentType("text/html;charset=UTF-8");
 		}
 	});
 	$(function() {
+		$.datepicker.setDefaults({
+		    dateFormat: 'yy-mm-dd' //Input Display Format 변경
+		});
+
+		$("#birth").datepicker();
 		$(".zeta-menu li").hover(function() {
 			$('ul:first', this).show();
 		}, function() {
@@ -186,6 +194,7 @@ response.setContentType("text/html;charset=UTF-8");
    	{
    		document.getElementById("email_address").style.display="inline";
    	}
+
  </script>
 <title>CUVIC</title>
 </head>
@@ -273,7 +282,7 @@ response.setContentType("text/html;charset=UTF-8");
 					<input type="hidden" id="email" name="email" value="">
 					<input id="email_address" type="text" style="display:none">				
 					<p>생년월일</p>
-					<input id="birth" type="date" name="birth" required>
+					<input type="text" id="birth" name="birth" required>
 					<p">동아리 기수</p>
 					<input type="number" name="club_num" id="club_num" placeholder="동아리 기수" required><br><br>
 					<p>닉네임</p>
