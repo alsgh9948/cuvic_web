@@ -2,7 +2,7 @@
     <wb-module deploy-name="cuvic_web_site">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="cuvic_web_site"/>
         <property name="java-output-path" value="/cuvic_web_site/build/classes"/>
+        <property name="context-root" value="cuvic_web_site1"/>
     </wb-module>
 </project-modules>

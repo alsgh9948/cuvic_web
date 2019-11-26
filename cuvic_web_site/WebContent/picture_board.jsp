@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="css/main.css?version=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-
+<script type="text/javascript" src="dist/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
 .mySlides {
@@ -30,6 +30,18 @@
 	width: 13px;
 	padding: 0
 }
+  #contents1{
+  	margin:10px auto;
+  	width: 70%;
+  	border: solid 2px #e5e5e5;
+  	min-height: 880px;
+  	padding:5px 30px 5px 35px;
+  	float:right;
+  	}
+  img
+  	{
+  	width:100%;
+  	}
 </style>
 
 <script>
@@ -78,7 +90,7 @@
 					<td><button onclick="logout()"">로그아웃</button></td>
 				</tr>
 			</table>
-			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
+			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -119,8 +131,11 @@
 					</ul>
 				</div>
 			</div>
-			<div id="contents" style="height: 880px;">
+			<textarea name="ir1" id="ir1" rows="10" cols="100" style="width:766px; height:412px; display:none;"></textarea>
+
+			<div id="contents1">
 			<input type="button" style="float:right;" value="사진등록" data-toggle="modal" data-target="#upload">
+			
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
@@ -176,6 +191,58 @@
 	<div id="footer">
 		<h1>뭐넣지</h1>
 	</div>
+	<script type="text/javascript">
+var oEditors = [];
+
+// 추가 글꼴 목록
+//var aAdditionalFontSet = [["MS UI Gothic", "MS UI Gothic"], ["Comic Sans MS", "Comic Sans MS"],["TEST","TEST"]];
+
+nhn.husky.EZCreator.createInIFrame({
+	oAppRef: oEditors,
+	elPlaceHolder: "ir1",
+	sSkinURI: "dist/SmartEditor2Skin.html",	
+	htParams : {
+		bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+		bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+		bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+		//aAdditionalFontList : aAdditionalFontSet,		// 추가 글꼴 목록
+		fOnBeforeUnload : function(){
+			//alert("완료!");
+		}
+	}, //boolean
+	fOnAppLoad : function(){
+		//예제 코드
+		//oEditors.getById["ir1"].exec("PASTE_HTML", ["로딩이 완료된 후에 본문에 삽입되는 text입니다."]);
+	},
+	fCreator: "createSEditor2"
+});
+
+function pasteHTML() {
+	var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
+	oEditors.getById["ir1"].exec("PASTE_HTML", [sHTML]);
+}
+
+function showHTML() {
+	var sHTML = oEditors.getById["ir1"].getIR();
+	alert(sHTML);
+}
+	
+function submitContents(elClickedObj) {
+	oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
+	
+	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
+	
+	try {
+		elClickedObj.form.submit();
+	} catch(e) {}
+}
+
+function setDefaultFont() {
+	var sDefaultFont = '궁서';
+	var nFontSize = 24;
+	oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
+}
+</script>
 </body>
 </html>
 

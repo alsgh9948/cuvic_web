@@ -98,7 +98,7 @@
 					}
 					cnt++;
 					%>
-					$('#group_<%=n%>').append("<table style='margin:auto; width:550px; margin-top: 20px;'>"
+					$('#group_<%=n%>').append("<table style='margin:auto; width:550px; margin-top: 10px;'>"
 	 							         +"<tr><td rowspan='3'align='center' width='30%'><img src='user_img/<%=list[0]%>' style='padding:5px 0 5px 0; max-width: auto; height: 188px;'></td>"
   										 +"<td width='20%''>이름 : <%=list[1]%></td>"
  				 						 +"<td width='20%''>기수 : <%=list[2]%>기</td>"
