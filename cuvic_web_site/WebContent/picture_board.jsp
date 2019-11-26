@@ -131,10 +131,9 @@
 					</ul>
 				</div>
 			</div>
-			<textarea name="ir1" id="ir1" rows="10" cols="100" style="width:766px; height:412px; display:none;"></textarea>
 
 			<div id="contents1">
-			<input type="button" style="float:right;" value="사진등록" data-toggle="modal" data-target="#upload">
+			<input type="button" style="float:right;" value="사진등록" onClick="location.href='upload_picture.jsp'">
 			
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
@@ -163,6 +162,8 @@
 	  		<div id="new_post">
 	  			<h1>최신글</h1>
 	  		</div>
+	  		<textarea name="ir1" id="ir1" rows="10" cols="80" style="width:766px; height:412px; display:none;"></textarea>
+	  		
 	  		<div class="modal fade" id="upload" role="dialog">
 				<div class="modal-dialog modal-sm">
 					<!-- Modal content-->
@@ -171,20 +172,6 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title" style="text-align: center;'">사진등록</h4>
 						</div>
-						<img src="" alt="이미지없음">
-						<form method=post action="fileupload.jsp" enctype="Multipart/form-data" id="img">
-							<input type="hidden" id="user_id" value="">
-							<div class="modal-body" >
-							</div>
-							<div class="modal-footer">
-								<div class="col-md-6">
-									<input type=button value="업로드" onclick="upload()">
-								</div>
-								<div class="col-md-6">
-									<input type=button data-dismiss="modal" value="닫기">
-								</div>
-							</div>
-						</form>
 					</div>
 				</div>
 			</div>

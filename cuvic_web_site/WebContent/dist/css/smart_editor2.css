@@ -82,7 +82,7 @@ body,#smart_editor2,#smart_editor2 p,#smart_editor2 h1,#smart_editor2 h2,#smart_
 #smart_editor2 div.se2_text_tool ul li.active button span.tool_bg,#smart_editor2 div.se2_text_tool ul li.active li.active button span.tool_bg{background-position:0 -42px}
 #smart_editor2 div.se2_text_tool ul li.active li button span.tool_bg{background-position:0 0}
 /* TEXT_TOOLBAR : SUB_MENU */
-#smart_editor2 .se2_sub_text_tool{display:none;position:absolute;top:20px;left:0;z-index:40;width:auto;height:29px;padding:0 4px 0 0;border:1px solid #b5b5b5;border-top:1px solid #9a9a9a;background:#f4f4f4}
+#smart_editor2 .se2_sub_text_tool{display:none;position:absolute;top:20px;left:0;z-index:40;;height:29px;padding:0 4px 0 0;border:1px solid #b5b5b5;border-top:1px solid #9a9a9a;background:#f4f4f4}
 #smart_editor2 .active .se2_sub_text_tool{display:block}
 #smart_editor2 .se2_sub_text_tool ul{float:left;height:25px;margin:0;padding:4px 0 0 4px}
 /* TEXT_TOOLBAR : SUB_MENU_SIZE */
