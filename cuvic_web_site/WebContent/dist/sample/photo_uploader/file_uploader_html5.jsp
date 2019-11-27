@@ -26,7 +26,7 @@
 	System.out.println("22222 : "+ext);
 
 	// 파일 기본경로
-	String defaultPath = "C:\\Users\\seo\\Desktop\\web\\cuvic_web_site\\WebContent\\";
+	String defaultPath = "\\home\\ubuntu";
 	System.out.println("33333 : "+defaultPath);
 
 	// 파일 기본경로 _ 상세경로

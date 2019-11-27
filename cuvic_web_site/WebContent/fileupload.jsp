@@ -31,7 +31,7 @@
    String encType = "UTF-8";
    String savefile = "image";
    ServletContext scontext = getServletContext();
-   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/user_img";
+   realFolder ="/home/ubuntu/user_img";
    System.out.println(realFolder);
    try {
       
