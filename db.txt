@@ -1,0 +1,27 @@
+CREATE TABLE `cuvic`.`user_list` (
+  `id` VARCHAR(10) NOT NULL,
+  `password` VARCHAR(10) NULL,
+  `name` VARCHAR(10) NULL,
+  `gender` VARCHAR(2) NULL,
+  `phone_num` VARCHAR(11) NULL,
+  `email` VARCHAR(100) NULL DEFAULT '-',
+  `birth` DATE NULL,
+  `club_num` INT(11) NULL,
+  `nickname` VARCHAR(10) NULL,
+  `work_place` VARCHAR(45) NULL DEFAULT '-',
+  `open_state` VARCHAR(45) NULL,
+  `img_name` VARCHAR(100) NULL DEFAULT '-',
+  `comment` VARCHAR(100) NULL DEFAULT '-',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+CREATE TABLE `cuvic`.`active_record_list` (
+  `title` VARCHAR(200) NOT NULL,
+  `date` DATE NULL,
+  `member` VARCHAR(200) NULL,
+  `detail` VARCHAR(500) NULL,
+  PRIMARY KEY (`title`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
