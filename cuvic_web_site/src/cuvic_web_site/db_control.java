@@ -244,4 +244,21 @@ public class db_control {
 			disconnect();
 		}
 	}
+	public void insert_picture(data_get_set value, String nick_name) {
+		connect();
+		StringBuilder sb = new StringBuilder();
+		sql = sb.append("insert into picture_board(writer_name,title,contents) values('").
+				append(nick_name + "','")
+				.append(value.getTitle() + "','")
+				.append(value.getContents() + "');")
+				.toString();
+		try {
+			st.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
 }

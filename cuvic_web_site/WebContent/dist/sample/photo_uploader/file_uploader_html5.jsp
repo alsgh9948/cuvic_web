@@ -13,12 +13,16 @@
 <%@ page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
 <%@ page import="org.apache.commons.fileupload.servlet.ServletFileUpload"%>
 <%@ page import="java.nio.file.Paths"%>
+<%@ page import="java.net.*"%>
 <%
 	// 로컬경로에 파일 저장하기 ============================================
 	String sFileInfo = "";
-
+request.setCharacterEncoding("UTF-8");
+response.setContentType("text/html;charset=UTF-8");
 	// 파일명 - 싱글파일업로드와 다르게 멀티파일업로드는 HEADER로 넘어옴 
 	String name = request.getHeader("file-name");
+	name = URLDecoder.decode(name, "utf-8");
+
 	System.out.println("11111 : "+name);
 
 	// 확장자
@@ -26,7 +30,7 @@
 	System.out.println("22222 : "+ext);
 
 	// 파일 기본경로
-	String defaultPath = "\\home\\ubuntu";
+	String defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\dist\\";
 	System.out.println("33333 : "+defaultPath);
 
 	// 파일 기본경로 _ 상세경로
@@ -68,7 +72,7 @@
 // 		}
 // 	}
 
-	sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/upload/"+name;
+	sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"upload/"+name;
 	out.println(sFileInfo);	
 
 	// ./로컬경로에 파일 저장하기 ============================================

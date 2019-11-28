@@ -18,6 +18,7 @@ public class data_get_set {
 	private String member;
 	private String date;
 	private String detail;
+	private String contents;
 	
 	public String getDetail() {
 		return detail;
@@ -120,5 +121,11 @@ public class data_get_set {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public String getContents() {
+		return contents;
+	}
+	public void setContents(String contents) {
+		this.contents = contents;
 	}
 }

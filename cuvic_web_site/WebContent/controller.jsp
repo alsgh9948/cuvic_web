@@ -101,6 +101,12 @@ response.setContentType("text/html;charset=UTF-8");
 		String Type=request.getParameter("type");
 		pageContext.forward("data_board.jsp");
 	}
+	else if(action.equals("picture_upload"))
+	{
+		String nick_name = (String)session.getAttribute("nick_name");
+		db.insert_picture(data_get_set,nick_name);
+		pageContext.forward("picture_board.jsp");
+	}
 	%>
 	</script>
 <body>

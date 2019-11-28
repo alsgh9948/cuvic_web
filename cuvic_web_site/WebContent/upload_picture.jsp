@@ -132,10 +132,12 @@
 				</div>
 			</div>
 			<div id="contents1">
-			<input type="button" style="float:right; margin-bottom:5px;" value="사진등록" onclick="submitContents()">
-		
-			<textarea name="ir1" id="ir1" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"></textarea>
-			
+			<form action="controller.jsp" method="post" id="sb">
+				<input type="hidden" name="action" value="picture_upload">
+				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
+				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"></textarea>
+				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
+			</form>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
@@ -175,7 +177,7 @@ var oEditors = [];
 
 nhn.husky.EZCreator.createInIFrame({
 	oAppRef: oEditors,
-	elPlaceHolder: "ir1",
+	elPlaceHolder: "contents",
 	sSkinURI: "dist/SmartEditor2Skin.html",	
 	htParams : {
 		bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
@@ -195,17 +197,31 @@ nhn.husky.EZCreator.createInIFrame({
 
 function pasteHTML() {
 	var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
-	oEditors.getById["ir1"].exec("PASTE_HTML", [sHTML]);
+	oEditors.getById["contents"].exec("PASTE_HTML", [sHTML]);
 }
 
 function showHTML() {
-	var sHTML = oEditors.getById["ir1"].getIR();
+	var sHTML = oEditors.getById["contents"].getIR();
 	alert(sHTML);
 }
 	
 function submitContents(elClickedObj) {
-	oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
-	alert(document.getElementById("ir1").value);
+	oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
+	var title = document.getElementById("title").value;
+	var contents = document.getElementById("contents").value;
+	if(title=="")
+	{
+		alert("제목을 입력하세요");
+		location.href = "#title";
+		return;
+	}
+	if(contents == ""  || contents == null || contents == '&nbsp;' || contents == '<p>&nbsp;</p>')
+	{
+		alert("내용을 입력하세요");
+		oEditors.getById["contents"].exec("FOCUS"); //포커싱
+		return;
+	}
+	document.getElementById("sb").submit();
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
 	
@@ -217,7 +233,7 @@ function submitContents(elClickedObj) {
 function setDefaultFont() {
 	var sDefaultFont = '궁서';
 	var nFontSize = 24;
-	oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
+	oEditors.getById["contents"].setDefaultFont(sDefaultFont, nFontSize);
 }
 </script>
 </body>
