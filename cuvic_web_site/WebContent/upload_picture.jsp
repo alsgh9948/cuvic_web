@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.Calendar"%>
+<%@ page import="java.text.SimpleDateFormat,java.io.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -77,11 +79,26 @@
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
+    function mk_dir()
+    {
+    	<%
+    	Calendar calendar = Calendar.getInstance();
+        java.util.Date date = calendar.getTime();
+        String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
+        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+		session.setAttribute("folder_name", today);
+        folder.mkdirs();
+        %>
+    }
 </script>
 <title>CUVIC</title>
 </head>
 
-<body>
+<body onload="mk_dir()" onbeforeunload ="remove_dir()">
+	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
+	<form method="post" action="controller.jsp" target="if" id="remove_form">
+		<input type="hidden" name="action" value="remove_folder"> 
+	</form>
 	<div class="wrapper">
 		<div id=user_info align="right">
 			<table>
@@ -156,7 +173,7 @@
 				<form method="post" action="controller.jsp">
 					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
 					<input type="hidden" name="action" value="logout">
-					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
+					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout" onclick="change_state()">
 				</form>
 	  		</div>
 	  		<div id="event_list">
@@ -204,7 +221,13 @@ function showHTML() {
 	var sHTML = oEditors.getById["contents"].getIR();
 	alert(sHTML);
 }
-	
+var state = false;
+function remove_dir(){
+	if(state == false)
+	{	
+		document.getElementById("remove_form").submit();
+	}
+}
 function submitContents(elClickedObj) {
 	oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 	var title = document.getElementById("title").value;
@@ -221,6 +244,7 @@ function submitContents(elClickedObj) {
 		oEditors.getById["contents"].exec("FOCUS"); //포커싱
 		return;
 	}
+	state = true;
 	document.getElementById("sb").submit();
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.

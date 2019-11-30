@@ -244,13 +244,14 @@ public class db_control {
 			disconnect();
 		}
 	}
-	public void insert_picture(data_get_set value, String nick_name) {
+	public void insert_picture(data_get_set value, String nick_name, String folder_name) {
 		connect();
 		StringBuilder sb = new StringBuilder();
-		sql = sb.append("insert into picture_board(writer_name,title,contents) values('").
+		sql = sb.append("insert into picture_board(writer_name,title,contents,folder_name) values('").
 				append(nick_name + "','")
 				.append(value.getTitle() + "','")
-				.append(value.getContents() + "');")
+				.append(value.getContents() + "','")
+				.append(nick_name+"_"+folder_name+ "');")
 				.toString();
 		try {
 			st.executeUpdate(sql);

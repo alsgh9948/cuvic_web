@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="java.util.ArrayList"%>
+	pageEncoding="UTF-8" import="java.util.ArrayList, java.io.File"%>
 <% request.setCharacterEncoding("UTF-8");
 response.setContentType("text/html;charset=UTF-8");
  %>
@@ -104,8 +104,19 @@ response.setContentType("text/html;charset=UTF-8");
 	else if(action.equals("picture_upload"))
 	{
 		String nick_name = (String)session.getAttribute("nick_name");
-		db.insert_picture(data_get_set,nick_name);
+		String folder_name = (String)session.getAttribute("folder_name");
+		db.insert_picture(data_get_set,nick_name,folder_name);
 		pageContext.forward("picture_board.jsp");
+	}
+	else if(action.equals("remove_folder"))
+	{
+		String today = (String)session.getAttribute("folder_name");
+        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+        File[] file_list = folder.listFiles();
+		for (int i = 0; i < file_list.length; i++) {
+			file_list[i].delete(); 
+		}
+			folder.delete();
 	}
 	%>
 	</script>
