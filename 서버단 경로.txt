@@ -1,8 +1,14 @@
 file_uploader_html5.jsp
-사진첩 upload 경로 : "/usr/local/tomcat/webapps/cuvic_web_site/upload","/cuvic_web_site/upload/"
+사진첩 upload 경로 : "/usr/local/tomcat/webapps/cuvic_web_site/upload/"+folder_name+"/";
+"/cuvic_web_site/upload/"
 
 fileupload.jsp
 "/usr/local/tomcat/webapps/cuvic_web_site/user_img"
 
 upload_picture.jsp
 "/usr/local/tomcat/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today
+
+
+db_control.java
+load_picture
+"/usr/local/tomcat/webapps/cuvic_web_site/upload/"+term_list[5]
