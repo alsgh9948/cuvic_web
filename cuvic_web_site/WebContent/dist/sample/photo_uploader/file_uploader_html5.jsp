@@ -16,7 +16,13 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.SimpleDateFormat"%>
-
+<%   
+response.setHeader("Cache-Control","no-store");   
+response.setHeader("Pragma","no-cache");   
+response.setDateHeader("Expires",0);   
+if (request.getProtocol().equals("HTTP/1.1")) 
+        response.setHeader("Cache-Control", "no-cache"); 
+%> 
 <%
 	// 로컬경로에 파일 저장하기 ============================================
 	String sFileInfo = "";
@@ -34,11 +40,11 @@ response.setContentType("text/html;charset=UTF-8");
 	String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
     
 	// 파일 기본경로
-	String defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\upload\\";
+	String defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\upload\\"+folder_name+"\\";
 	System.out.println("33333 : "+defaultPath);
 
 	// 파일 기본경로 _ 상세경로
-	String path = defaultPath + folder_name + File.separator;
+	String path = defaultPath + File.separator;
 	System.out.println("44444 : "+path+name);
 
 
@@ -78,6 +84,5 @@ response.setContentType("text/html;charset=UTF-8");
 
 	sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/upload/"+folder_name+"/"+name;
 	out.println(sFileInfo);	
-
 	// ./로컬경로에 파일 저장하기 ============================================
 %>

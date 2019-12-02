@@ -2,6 +2,8 @@ package cuvic_web_site;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.io.File;
+
 import cuvic_web_site.data_get_set;
 
 public class db_control {
@@ -160,34 +162,6 @@ public class db_control {
 		}
 		return null;
 	}
-	public ArrayList<String[]> load_list()
-	{
-		// 입력한 아이디가 이미 user 테이블에 있는지 검사
-		sql = "select * from user_list order by club_num, name";
-		ArrayList<String[]> user_list = new ArrayList<String[]>();
-		connect();
-		try {
-			rs = st.executeQuery(sql);
-			while(rs.next()) {
-				String[] term_list = new String[7];
-				term_list[0] = rs.getString("club_num");
-				term_list[1] = rs.getString("name");
-				term_list[2] = rs.getString("email");
-				term_list[3] = rs.getString("work_place");
-				term_list[4] = rs.getString("comment");
-				term_list[5] = rs.getString("img_name");
-				term_list[6] = rs.getString("open_state");
-				user_list.add(term_list);
-			}
-			rs.close();
-			return user_list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			disconnect();
-		}
-		return null;
-	}
 	public ArrayList<String[]> load_active_record()
 	{
 		// 입력한 아이디가 이미 user 테이블에 있는지 검사
@@ -261,5 +235,35 @@ public class db_control {
 		} finally {
 			disconnect();
 		}
+	}
+	public ArrayList<String[]> load_picture()
+	{
+		// 입력한 아이디가 이미 user 테이블에 있는지 검사
+		sql = "select * from picture_board order by date desc";
+		ArrayList<String[]> picture_list = new ArrayList<String[]>();
+		connect();
+		try {
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				String[] term_list = new String[7];
+				term_list[0] = rs.getString("cnt");
+				term_list[1] = rs.getString("date");
+				term_list[2] = rs.getString("writer_name");
+				term_list[3] = rs.getString("title");
+				term_list[4] = rs.getString("contents");
+				term_list[5] = rs.getString("folder_name");
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+		        File[] file_list = folder.listFiles();
+		        term_list[6] = term_list[5]+"/"+file_list[0].getName();
+				picture_list.add(term_list);
+			}
+			rs.close();
+			return picture_list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return null;
 	}
 }

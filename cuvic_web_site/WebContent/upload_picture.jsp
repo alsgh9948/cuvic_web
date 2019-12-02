@@ -2,6 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.SimpleDateFormat,java.io.*"%>
+<%   
+response.setHeader("Cache-Control","no-store");   
+response.setHeader("Pragma","no-cache");   
+response.setDateHeader("Expires",0);   
+if (request.getProtocol().equals("HTTP/1.1")) 
+        response.setHeader("Cache-Control", "no-cache"); 
+%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -79,22 +86,11 @@
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
-    function mk_dir()
-    {
-    	<%
-    	Calendar calendar = Calendar.getInstance();
-        java.util.Date date = calendar.getTime();
-        String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
-		session.setAttribute("folder_name", today);
-        folder.mkdirs();
-        %>
-    }
 </script>
 <title>CUVIC</title>
 </head>
 
-<body onload="mk_dir()" onbeforeunload ="remove_dir()">
+<body onbeforeunload ="remove_dir()" onload="folder_check()">
 	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	<form method="post" action="controller.jsp" target="if" id="remove_form">
 		<input type="hidden" name="action" value="remove_folder"> 
@@ -152,7 +148,7 @@
 			<form action="controller.jsp" method="post" id="sb">
 				<input type="hidden" name="action" value="picture_upload">
 				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
-				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"></textarea>
+				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
 			</form>
 	  		</div>
@@ -187,6 +183,7 @@
 		<h1>뭐넣지</h1>
 	</div>
 	<script type="text/javascript">
+	
 var oEditors = [];
 
 // 추가 글꼴 목록
@@ -221,9 +218,28 @@ function showHTML() {
 	var sHTML = oEditors.getById["contents"].getIR();
 	alert(sHTML);
 }
-var state = false;
+var flag = false;
+function folder_check()
+{
+	var title = document.getElementById("title").value;
+	var contents = document.getElementById("contents").value;
+	if(title != "" || contents != " ")
+	{
+		flag = true;
+		alert("뒤로가기로 넘어와서 새로고침 해야함");
+		location.reload();
+	}
+	<%
+	Calendar calendar = Calendar.getInstance();
+    java.util.Date date = calendar.getTime();
+    String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
+    File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+	session.setAttribute("folder_name", today);
+    folder.mkdirs();
+    %>
+}
 function remove_dir(){
-	if(state == false)
+	if(flag == false)
 	{	
 		document.getElementById("remove_form").submit();
 	}
@@ -238,13 +254,13 @@ function submitContents(elClickedObj) {
 		location.href = "#title";
 		return;
 	}
-	if(contents == ""  || contents == null || contents == '&nbsp;' || contents == '<p>&nbsp;</p>')
+	if(contents == ""  || contents == null || contents == '&nbsp;' || contents == '<p>&nbsp;</p>' || contents == " ")
 	{
 		alert("내용을 입력하세요");
 		oEditors.getById["contents"].exec("FOCUS"); //포커싱
 		return;
 	}
-	state = true;
+	flag = true;
 	document.getElementById("sb").submit();
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.

@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:useBean id="picture_list" scope="request" class="java.util.ArrayList" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +16,6 @@
 <link rel="stylesheet" type="text/css" href="css/main.css?version=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-<script type="text/javascript" src="dist/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
 .mySlides {
@@ -30,18 +31,53 @@
 	width: 13px;
 	padding: 0
 }
+#contents1 td{
+	border: solid 1px black;
+	}
+#contents1 th{
+	width:50px;
+}
   #contents1{
   	margin:10px auto;
   	width: 70%;
   	border: solid 2px #e5e5e5;
   	min-height: 880px;
-  	padding:5px 30px 5px 35px;
+  	padding:5px 10px 5px 10px;
   	float:right;
   	}
-  img
-  	{
-  	width:100%;
-  	}
+  	.a li{
+	display:block;
+	float:left;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+.a li:hover>a{
+	color:pink;
+	text-decoration: none;
+}
+.flex-container {
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.post_frame
+{
+	 border: solid 1.5px #e5e5e5;
+}
+.frame
+{
+	height:160px;
+}
+.frame img
+{
+	 max-width:210px;
+	 vertical-align: middle;	 
+}
 </style>
 
 <script>
@@ -77,11 +113,65 @@
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
+    var now_page = "1";
+
+    function load_picture()
+	{
+		<%
+		int n = 0,cnt=0, pcnt = 0;
+		for(String[] list : (ArrayList<String[]>)picture_list)
+		{
+			if(cnt%9 == 0)
+			{
+				n++;
+				if(n < 2)
+				{
+					%>$('#contents1').append("<div id='group_<%=n%>' style='display:block; visibility:visible;'></div>")<%;
+				}
+				else
+				{
+					%>$('#contents1').append("<div id='group_<%=n%>' style='display:none;visibility:hidden'></div>")<%;
+				}	
+			}
+			if(cnt%3 == 0)
+			%>
+			$('#group_<%=n%>').append("<div class='flex-container' id='flex_group_<%=cnt/3%>'></div><br>");
+			<%
+			%>
+			$('#flex_group_<%=cnt/3%>').append("<div class='post_frame'>"
+											  +"<div class='frame' style='width:210px;text-align:center;'>"
+											  +"<span class='helper'></span>"
+											  +"<img src='upload/<%=list[6]%>' style='max-height:150px;'>"
+											  +"<span class='helper'></span></div>"
+											  +"<p><%=list[3]%></p><p>조회수 : 12 | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
+			<%
+			cnt++;
+		}
+		%>
+		$('#contents1').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
+		<%
+		for(int i = 1 ; i <= n ; i++)
+		{
+			%>
+				$('#page_button').append("<li style='float: left; list-style:none'><a  href='javascript:void(0);' onclick='move_page(\"<%=i%>\")'> <%=i%></a></li>");
+			<%
+		}
+		%>
+	}
+	function move_page(num)
+	{
+	    document.getElementById("group_"+now_page).style.display="none";
+	    document.getElementById("group_"+now_page).style.visibility="hidden";
+	    
+	    document.getElementById("group_"+num).style.display="block";
+	    document.getElementById("group_"+num).style.visibility="visible";
+	    now_page=num;
+	}
 </script>
 <title>CUVIC</title>
 </head>
 
-<body>
+<body onload="load_picture()">
 	<div class="wrapper">
 		<div id=user_info align="right">
 			<table>
@@ -133,9 +223,10 @@
 			</div>
 
 			<div id="contents1">
-			<input type="button" style="float:right;" value="사진등록" onClick="location.href='upload_picture.jsp'">
-			
-	  		</div>
+				<input type="button" style="float:right;" value="사진등록" onClick="location.href='upload_picture.jsp'">
+				<br>
+				<br>
+			</div>
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
 				<form method="post" action="controller.jsp">
@@ -161,75 +252,10 @@
 	  		</div>
 	  		<div id="new_post">
 	  			<h1>최신글</h1>
-	  		</div>
-	  		<textarea name="ir1" id="ir1" rows="10" cols="80" style="width:766px; height:412px; display:none;"></textarea>
-	  		
-	  		<div class="modal fade" id="upload" role="dialog">
-				<div class="modal-dialog modal-sm">
-					<!-- Modal content-->
-					<div class="modal-content" >
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title" style="text-align: center;'">사진등록</h4>
-						</div>
-					</div>
-				</div>
-			</div>
+	  		</div>	  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
 	</div>
-	<script type="text/javascript">
-var oEditors = [];
-
-// 추가 글꼴 목록
-//var aAdditionalFontSet = [["MS UI Gothic", "MS UI Gothic"], ["Comic Sans MS", "Comic Sans MS"],["TEST","TEST"]];
-
-nhn.husky.EZCreator.createInIFrame({
-	oAppRef: oEditors,
-	elPlaceHolder: "ir1",
-	sSkinURI: "dist/SmartEditor2Skin.html",	
-	htParams : {
-		bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-		bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-		bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-		//aAdditionalFontList : aAdditionalFontSet,		// 추가 글꼴 목록
-		fOnBeforeUnload : function(){
-			//alert("완료!");
-		}
-	}, //boolean
-	fOnAppLoad : function(){
-		//예제 코드
-		//oEditors.getById["ir1"].exec("PASTE_HTML", ["로딩이 완료된 후에 본문에 삽입되는 text입니다."]);
-	},
-	fCreator: "createSEditor2"
-});
-
-function pasteHTML() {
-	var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
-	oEditors.getById["ir1"].exec("PASTE_HTML", [sHTML]);
-}
-
-function showHTML() {
-	var sHTML = oEditors.getById["ir1"].getIR();
-	alert(sHTML);
-}
-	
-function submitContents(elClickedObj) {
-	oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
-	
-	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
-	
-	try {
-		elClickedObj.form.submit();
-	} catch(e) {}
-}
-
-function setDefaultFont() {
-	var sDefaultFont = '궁서';
-	var nFontSize = 24;
-	oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
-}
-</script>
 </body>
 </html>
 
