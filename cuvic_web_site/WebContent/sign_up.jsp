@@ -178,7 +178,7 @@ response.setContentType("text/html;charset=UTF-8");
    			}
    		}
 		document.getElementsByName("user_id")[0].value = document.getElementsByName("id")[0].value
-		if(document.getElementsByName("gender").checked)
+		if(document.getElementsByName("gender")[0].checked)
 		{
 			document.getElementsByName("user_gender")[0].value = "m";
 		}

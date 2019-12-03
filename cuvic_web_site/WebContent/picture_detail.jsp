@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.Calendar"%>
-<%@ page import="java.text.SimpleDateFormat,java.io.*"%>
-<%   
-response.setHeader("Cache-Control","no-store");   
-response.setHeader("Pragma","no-cache");   
-response.setDateHeader("Expires",0);   
-if (request.getProtocol().equals("HTTP/1.1")) 
-        response.setHeader("Cache-Control", "no-cache"); 
-%> 
+    pageEncoding="UTF-8" import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:useBean id="picture_list" scope="request" class="java.util.ArrayList" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,7 +16,6 @@ if (request.getProtocol().equals("HTTP/1.1"))
 <link rel="stylesheet" type="text/css" href="css/main.css?version=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-<script type="text/javascript" src="dist/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
 .mySlides {
@@ -39,18 +31,34 @@ if (request.getProtocol().equals("HTTP/1.1"))
 	width: 13px;
 	padding: 0
 }
+#contents1 td{
+	border: solid 1px black;
+	}
+#contents1 th{
+	width:50px;
+}
   #contents1{
   	margin:10px auto;
   	width: 70%;
   	border: solid 2px #e5e5e5;
   	min-height: 880px;
-  	padding:5px 5px 5px 5px;
+  	padding:5px 10px 5px 10px;
   	float:right;
   	}
-  img
-  	{
-  	width:100%;
-  	}
+  	.a li{
+	display:block;
+	float:left;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+.a li:hover>a{
+	color:pink;
+	text-decoration: none;
+}
+#contents1 img
+{
+	max-width:650px;
+}
 </style>
 
 <script>
@@ -86,21 +94,32 @@ if (request.getProtocol().equals("HTTP/1.1"))
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
+    var now_page = "1";
+
+    function load_picture()
+	{
+		<%
+		int n = 0,cnt=0, pcnt = 0;
+		for(String[] list : (ArrayList<String[]>)picture_list)
+		{
+			%>
+			$('#contents1').append('<p>제목 : <%=list[3]%> 작성자 : <%=list[2]%> 작성일 : <%=list[1].split(" ")[0]%></p><hr>');
+			$('#contents1').append('<%=list[4].replaceAll("(\r\n|\r|\n|\n\r)", "")%>'.replace(/\r/g, ''));
+			<%
+		}
+		%>
+	}
 </script>
 <title>CUVIC</title>
 </head>
 
-<body onbeforeunload ="remove_dir()" onload="folder_check()">
-	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
-	<form method="post" action="controller.jsp" target="if" id="remove_form">
-		<input type="hidden" name="action" value="remove_folder"> 
-	</form>
+<body onload="load_picture()">
 	<div class="wrapper">
 		<div id=user_info align="right">
 			<table>
 				<tr>
 					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()">로그아웃</button></td>
+					<td><button onclick="logout()"">로그아웃</button></td>
 				</tr>
 			</table>
 			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
@@ -144,14 +163,12 @@ if (request.getProtocol().equals("HTTP/1.1"))
 					</ul>
 				</div>
 			</div>
+
 			<div id="contents1">
-			<form action="controller.jsp" method="post" id="sb">
-				<input type="hidden" name="action" value="picture_upload">
-				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
-				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
-				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
-			</form>
-	  		</div>
+				<input type="button" style="float:right;" value="사진등록" onClick="location.href='upload_picture.jsp'">
+				<br>
+				<br>
+			</div>
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
 				<form method="post" action="controller.jsp">
@@ -169,7 +186,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 				<form method="post" action="controller.jsp">
 					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
 					<input type="hidden" name="action" value="logout">
-					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout" onclick="change_state()">
+					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
 				</form>
 	  		</div>
 	  		<div id="event_list">
@@ -177,105 +194,10 @@ if (request.getProtocol().equals("HTTP/1.1"))
 	  		</div>
 	  		<div id="new_post">
 	  			<h1>최신글</h1>
-	  		</div>
-	  		
+	  		</div>	  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
 	</div>
-	<script type="text/javascript">
-	
-var oEditors = [];
-
-// 추가 글꼴 목록
-//var aAdditionalFontSet = [["MS UI Gothic", "MS UI Gothic"], ["Comic Sans MS", "Comic Sans MS"],["TEST","TEST"]];
-
-nhn.husky.EZCreator.createInIFrame({
-	oAppRef: oEditors,
-	elPlaceHolder: "contents",
-	sSkinURI: "dist/SmartEditor2Skin.html",	
-	htParams : {
-		bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-		bUseVerticalResizer : true,		// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-		bUseModeChanger : true,			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-		//aAdditionalFontList : aAdditionalFontSet,		// 추가 글꼴 목록
-		fOnBeforeUnload : function(){
-			//alert("완료!");
-		}
-	}, //boolean
-	fOnAppLoad : function(){
-		//예제 코드
-		//oEditors.getById["ir1"].exec("PASTE_HTML", ["로딩이 완료된 후에 본문에 삽입되는 text입니다."]);
-	},
-	fCreator: "createSEditor2"
-});
-
-function pasteHTML() {
-	var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
-	oEditors.getById["contents"].exec("PASTE_HTML", [sHTML]);
-}
-
-function showHTML() {
-	var sHTML = oEditors.getById["contents"].getIR();
-	alert(sHTML);
-}
-var flag = false;
-function folder_check()
-{
-	var title = document.getElementById("title").value;
-	var contents = document.getElementById("contents").value;
-	if(title != "" || contents != " ")
-	{
-		flag = true;
-		alert("뒤로가기로 넘어와서 새로고침 해야함");
-		location.reload();
-	}
-	<%
-	Calendar calendar = Calendar.getInstance();
-    java.util.Date date = calendar.getTime();
-    String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-    File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
-	session.setAttribute("folder_name", today);
-    folder.mkdirs();
-    %>
-}
-function remove_dir(){
-	if(flag == false)
-	{	
-		document.getElementById("remove_form").submit();
-	}
-}
-function submitContents(elClickedObj) {
-	oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
-	var title = document.getElementById("title").value;
-	var contents = document.getElementById("contents").value;
-	if(title=="")
-	{
-		alert("제목을 입력하세요");
-		location.href = "#title";
-		return;
-	}
-	if(contents == ""  || contents == null || contents == '&nbsp;' || contents == '<p>&nbsp;</p>' || contents == " ")
-	{
-		alert("내용을 입력하세요");
-		oEditors.getById["contents"].exec("FOCUS"); //포커싱
-		return;
-	}
-	flag = true;
-	document.getElementById("sb").submit();
-
-	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
-	
-	try {
-		elClickedObj.form.submit();
-	} catch(e) {}
-}
-
-function setDefaultFont() {
-	var sDefaultFont = '궁서';
-	var nFontSize = 24;
-	oEditors.getById["contents"].setDefaultFont(sDefaultFont, nFontSize);
-}
-</script>
 </body>
 </html>
 

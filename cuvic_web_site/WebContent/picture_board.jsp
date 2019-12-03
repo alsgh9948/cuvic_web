@@ -141,9 +141,9 @@
 			$('#flex_group_<%=cnt/3%>').append("<div class='post_frame'>"
 											  +"<div class='frame' style='width:210px;text-align:center;'>"
 											  +"<span class='helper'></span>"
-											  +"<img src='upload/<%=list[6]%>' style='max-height:150px;'>"
+											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><img src='upload/<%=list[6]%>' style='max-height:150px;'></a>"
 											  +"<span class='helper'></span></div>"
-											  +"<p><%=list[3]%></p><p>조회수 : 12 | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
+											  +"<p><%=list[3]%></p><p>조회수 : 11 | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
 			<%
 			cnt++;
 		}

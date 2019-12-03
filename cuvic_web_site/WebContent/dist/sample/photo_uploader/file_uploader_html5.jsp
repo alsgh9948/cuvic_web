@@ -40,7 +40,7 @@ response.setContentType("text/html;charset=UTF-8");
 	String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
     
 	// 파일 기본경로
-	String defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\upload\\"+folder_name+"\\";
+	String defaultPath = "/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+folder_name+"/";
 	System.out.println("33333 : "+defaultPath);
 
 	// 파일 기본경로 _ 상세경로

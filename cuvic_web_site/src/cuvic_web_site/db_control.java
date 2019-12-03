@@ -12,7 +12,7 @@ public class db_control {
 	ResultSet rs = null;
 	Statement st = null;
 	String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3307/cuvic?useUnicode=true&characterEncoding=UTF-8";
+	String jdbc_url = "jdbc:mysql://localhost:8080/cuvic?useUnicode=true&characterEncoding=UTF-8";
 	String sql;
 //	
 	// 데이터베이스 연결
@@ -59,9 +59,9 @@ public class db_control {
 		String img_path = value.getImg_path();
 		if (value.getImg_path().equals("")) {
 			if (value.getGender().equals("m"))
-				img_path = "m";
+				img_path = "man.png";
 			else
-				img_path = "w";
+				img_path = "woman.png";
 		}
 		StringBuilder sb = new StringBuilder();
 		String sql = sb.append("insert into user_list values('")
@@ -76,7 +76,7 @@ public class db_control {
 				.append(value.getNick_name() + "','")
 				.append(value.getWork_place() + "','")
 				.append(value.getOpen_state() + "','")
-				.append(value.getGender() + "','")
+				.append(img_path + "','")
 				.append(value.getComment() + "');").toString();
 		try {
 			st.executeUpdate(sql);
@@ -236,10 +236,14 @@ public class db_control {
 			disconnect();
 		}
 	}
-	public ArrayList<String[]> load_picture()
+	public ArrayList<String[]> load_picture(String target)
 	{
 		// 입력한 아이디가 이미 user 테이블에 있는지 검사
-		sql = "select * from picture_board order by date desc";
+		if(target.equals("*"))
+			sql = "select * from picture_board order by date desc";
+		else
+			sql = "select * from picture_board where cnt="+target;
+		
 		ArrayList<String[]> picture_list = new ArrayList<String[]>();
 		connect();
 		try {
@@ -252,9 +256,11 @@ public class db_control {
 				term_list[3] = rs.getString("title");
 				term_list[4] = rs.getString("contents");
 				term_list[5] = rs.getString("folder_name");
-				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+				File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]);
 		        File[] file_list = folder.listFiles();
-		        term_list[6] = term_list[5]+"/"+file_list[0].getName();
+		        if(file_list.length == 0)
+		        	term_list[6] = "-";
+		        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
 				picture_list.add(term_list);
 			}
 			rs.close();

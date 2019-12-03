@@ -84,7 +84,7 @@ response.setContentType("text/html;charset=UTF-8");
 	}
 	else if(action.equals("load_picture_board"))
 	{
-		ArrayList<String[]> list = db.load_picture();
+		ArrayList<String[]> list = db.load_picture("*");
 		request.setAttribute("picture_list", list);
 		pageContext.forward("picture_board.jsp");
 	}
@@ -124,6 +124,13 @@ response.setContentType("text/html;charset=UTF-8");
 			folder.delete();
 		}	
     }
+	else if(action.equals("load_picture_detail"))
+	{
+		String target = (String)request.getParameter("cnt");
+		ArrayList<String[]> list = db.load_picture(target);
+		request.setAttribute("picture_list", list);
+		pageContext.forward("picture_detail.jsp");
+	}
 	%>
 	</script>
 <body>
