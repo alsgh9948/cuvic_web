@@ -1,3 +1,5 @@
+CREATE SCHEMA `cuvic11` DEFAULT CHARACTER SET utf8mb4 ;
+
 CREATE TABLE `cuvic`.`user_list` (
   `id` VARCHAR(10) NOT NULL,
   `password` VARCHAR(10) NULL,
@@ -21,7 +23,7 @@ CREATE TABLE `cuvic`.`active_record_list` (
   `title` VARCHAR(200) NOT NULL,
   `date` DATE NULL,
   `member` VARCHAR(200) NULL,
-  `detail` VARCHAR(500) NULL,
+  `detail` VARCHAR(200) NULL,
   PRIMARY KEY (`title`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
