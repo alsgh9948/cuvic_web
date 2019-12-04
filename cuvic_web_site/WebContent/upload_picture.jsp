@@ -94,6 +94,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	<form method="post" action="controller.jsp" target="if" id="remove_form">
 		<input type="hidden" name="action" value="remove_folder"> 
+		<input type="hidden" name="type" value="upload"> 
 	</form>
 	<div class="wrapper">
 		<div id=user_info align="right">
@@ -233,8 +234,9 @@ function folder_check()
 	Calendar calendar = Calendar.getInstance();
     java.util.Date date = calendar.getTime();
     String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-    File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+    File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
 	session.setAttribute("folder_name", today);
+	session.setAttribute("type", "upload");
     folder.mkdirs();
     %>
 }

@@ -78,6 +78,26 @@
 	 max-width:210px;
 	 vertical-align: middle;	 
 }
+.post_frame a
+{
+	color: black;}
+}
+.post_frame a:link 
+{
+	color: black;}
+}
+.post_frame  a:visited
+{
+	color: black;}
+}
+.post_frame a:active
+{
+	color: black;}
+}
+.post_frame a:hover
+{
+	color: black;}
+}
 </style>
 
 <script>
@@ -143,7 +163,7 @@
 											  +"<span class='helper'></span>"
 											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><img src='upload/<%=list[6]%>' style='max-height:150px;'></a>"
 											  +"<span class='helper'></span></div>"
-											  +"<p><%=list[3]%></p><p>조회수 : 11 | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
+											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><p><%=list[3]%></p></a><p>조회수 : <%=list[7]%> | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
 			<%
 			cnt++;
 		}

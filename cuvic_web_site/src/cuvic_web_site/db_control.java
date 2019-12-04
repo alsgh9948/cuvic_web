@@ -12,7 +12,7 @@ public class db_control {
 	ResultSet rs = null;
 	Statement st = null;
 	String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://localhost:8080/cuvic?useUnicode=true&characterEncoding=UTF-8";
+	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8";
 	String sql;
 //	
 	// 데이터베이스 연결
@@ -238,29 +238,91 @@ public class db_control {
 	}
 	public ArrayList<String[]> load_picture(String target)
 	{
-		// 입력한 아이디가 이미 user 테이블에 있는지 검사
-		if(target.equals("*"))
-			sql = "select * from picture_board order by date desc";
-		else
-			sql = "select * from picture_board where cnt="+target;
 		
 		ArrayList<String[]> picture_list = new ArrayList<String[]>();
 		connect();
 		try {
+			// 입력한 아이디가 이미 user 테이블에 있는지 검사
+			if(target.equals("*"))
+				sql = "select * from picture_board order by date desc";
+			else
+			{
+				sql = "select * from picture_board where cnt="+target;
+				st.executeUpdate("update picture_board set views=views+1 where cnt="+target);
+			}
 			rs = st.executeQuery(sql);
 			while(rs.next()) {
-				String[] term_list = new String[7];
+				String[] term_list = new String[8];
 				term_list[0] = rs.getString("cnt");
 				term_list[1] = rs.getString("date");
 				term_list[2] = rs.getString("writer_name");
 				term_list[3] = rs.getString("title");
 				term_list[4] = rs.getString("contents");
 				term_list[5] = rs.getString("folder_name");
-				File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]);
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
 		        File[] file_list = folder.listFiles();
 		        if(file_list.length == 0)
 		        	term_list[6] = "-";
 		        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
+		        term_list[7] = rs.getString("views");
+				picture_list.add(term_list);
+			}
+			rs.close();
+			return picture_list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return null;
+	}
+	public void insert_post(data_get_set value, String nick_name, String folder_name, String type) {
+		connect();
+		StringBuilder sb = new StringBuilder();
+		sql = sb.append("insert into "+type+"_board(writer_name,title,contents,folder_name) values('").
+				append(nick_name + "','")
+				.append(value.getTitle() + "','")
+				.append(value.getContents() + "','")
+				.append(nick_name+"_"+folder_name+ "');")
+				.toString();
+		try {
+			st.executeUpdate(sql);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
+	public ArrayList<String[]> load_post(String target, String type)
+	{
+		
+		ArrayList<String[]> picture_list = new ArrayList<String[]>();
+		connect();
+		try {
+			// 입력한 아이디가 이미 user 테이블에 있는지 검사
+			if(target.equals("*"))
+				sql = "select * from "+type+"_board order by date desc";
+			else
+			{
+				sql = "select * from "+type+"_board where cnt="+target;
+				st.executeUpdate("update "+type+"_board set views=views+1 where cnt="+target);
+			}
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				String[] term_list = new String[8];
+				term_list[0] = rs.getString("cnt");
+				term_list[1] = rs.getString("date");
+				term_list[2] = rs.getString("writer_name");
+				term_list[3] = rs.getString("title");
+				term_list[4] = rs.getString("contents");
+				term_list[5] = rs.getString("folder_name");
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+		        File[] file_list = folder.listFiles();
+		        if(file_list.length == 0)
+		        	term_list[6] = "-";
+		        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
+		        term_list[7] = rs.getString("views");
 				picture_list.add(term_list);
 			}
 			rs.close();

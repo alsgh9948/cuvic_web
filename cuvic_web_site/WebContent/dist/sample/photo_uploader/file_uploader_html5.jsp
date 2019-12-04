@@ -38,11 +38,10 @@ response.setContentType("text/html;charset=UTF-8");
 	String ext = name.substring(name.lastIndexOf(".")+1);
 	System.out.println("22222 : "+ext);
 	String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
-    
+    String type = (String)session.getAttribute("type");
 	// 파일 기본경로
-	String defaultPath = "/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+folder_name+"/";
+	String defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\"+type+"\\"+folder_name+"\\";
 	System.out.println("33333 : "+defaultPath);
-
 	// 파일 기본경로 _ 상세경로
 	String path = defaultPath + File.separator;
 	System.out.println("44444 : "+path+name);
@@ -82,7 +81,7 @@ response.setContentType("text/html;charset=UTF-8");
 // 		}
 // 	}
 
-	sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/upload/"+folder_name+"/"+name;
+	sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/"+type+"/"+folder_name+"/"+name;
 	out.println(sFileInfo);	
 	// ./로컬경로에 파일 저장하기 ============================================
 %>

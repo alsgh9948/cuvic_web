@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:useBean id="picture_list" scope="request" class="java.util.ArrayList" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +16,6 @@
 <link rel="stylesheet" type="text/css" href="css/main.css?version=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-
 
 <style>
 .mySlides {
@@ -30,7 +31,24 @@
 	width: 13px;
 	padding: 0
 }
-
+  #contents1{
+  	margin:10px auto;
+  	width: 70%;
+  	border: solid 2px #e5e5e5;
+  	min-height: 880px;
+  	padding:5px 10px 5px 10px;
+  	float:right;
+  	}
+  	.a li{
+	display:block;
+	float:left;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+.a li:hover>a{
+	color:pink;
+	text-decoration: none;
+}
 #post th{
 	border-bottom:solid #e5e5e5 2px;
 	text-align:center;
@@ -38,7 +56,11 @@
 #post th, td{
 	border-bottom:solid #e5e5e5 2px;
 }
-
+.flex-container {
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
 </style>
 
 <script>
@@ -68,11 +90,75 @@
     $(document).ready(function(){
       $('.slider').bxSlider();
     });
+    
+    function upload()
+	{
+		document.getElementById("user_id").value = nick_name;
+		document.getElementById("img").submit;
+	}
+    var now_page = "1";
+
+    function load_post()
+	{
+		<%
+		int n = 0,cnt=0, pcnt = 0;
+		for(String[] list : (ArrayList<String[]>)picture_list)
+		{
+			if(cnt%16 == 0)
+			{
+				n++;
+				if(n < 2)
+				{
+					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='display:block; visibility:visible;'>"
+											+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
+											+"<%=(String)request.getParameter("type").replace("'","") %></p></caption>"
+											+"<tr><th width='70%' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
+											+"<th width='15%' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
+											+"<th width='15%'>작성일</th></tr></table>");
+					<%
+				}
+				else
+				{
+					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='display:none;visibility:hidden'>"
+							+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
+							+"<%=(String)request.getParameter("type").replace("'","") %></p></caption>"
+							+"<tr><th width='70%' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
+							+"<th width='15%' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
+							+"<th width='15%'>작성일</th></tr></table>");
+					<%
+				}	
+			}
+			%>
+			$('#group_<%=n%>').append("<tr><td style="padding-top:10px;padding-bottom:10px;"><%=list[0]%>  <%=list[3]%></td>
+									 +"<td><%=list[2]%></td><td><%=list[1].split(" ")[0]%></td></tr>");
+		<%
+			cnt++;
+		}
+		%>
+		$('#post').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
+		<%
+		for(int i = 1 ; i <= n ; i++)
+		{
+			%>
+				$('#page_button').append("<li style='float: left; list-style:none'><a  href='javascript:void(0);' onclick='move_page(\"<%=i%>\")'> <%=i%></a></li>");
+			<%
+		}
+		%>
+	}
+	function move_page(num)
+	{
+	    document.getElementById("group_"+now_page).style.display="none";
+	    document.getElementById("group_"+now_page).style.visibility="hidden";
+	    
+	    document.getElementById("group_"+num).style.display="block";
+	    document.getElementById("group_"+num).style.visibility="visible";
+	    now_page=num;
+	}
 </script>
 <title>CUVIC</title>
 </head>
 
-<body>
+<body onload="load_post()">
 	<div class="wrapper">
 		<div id=user_info align="right">
 			<table>
@@ -81,7 +167,7 @@
 					<td><button onclick="logout()"">로그아웃</button></td>
 				</tr>
 			</table>
-			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
+			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -122,20 +208,10 @@
 					</ul>
 				</div>
 			</div>
-			<div id="contents" style="height: 880px;">
-				<button style="float:right;">게시글작성</button>
+
+			<div id="contents1" style="height: 880px;">
+				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp'">
 				<div id="post" style="clear:both;">
-					<table style="margin-top:70px;" width="95%">
-					<th width="70%" style="	border-right:solid #e5e5e5 2px;">
-						글제목
-					</th>
-					<th width="15%"	style="border-right:solid #e5e5e5 2px;">
-						작성자
-					</th>
-					<th width="15%">
-						작성일
-					</th>
-					</table>
 				</div>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
@@ -163,7 +239,7 @@
 	  		</div>
 	  		<div id="new_post">
 	  			<h1>최신글</h1>
-	  		</div>
+	  		</div>	  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
 	</div>

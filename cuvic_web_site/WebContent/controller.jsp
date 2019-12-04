@@ -88,10 +88,44 @@ response.setContentType("text/html;charset=UTF-8");
 		request.setAttribute("picture_list", list);
 		pageContext.forward("picture_board.jsp");
 	}
+	else if(action.equals("insert_post"))
+	{
+		String nick_name = (String)session.getAttribute("nick_name");
+		String folder_name = (String)session.getAttribute("folder_name");
+		String type = (String)session.getAttribute("type");
+		db.insert_post(data_get_set, nick_name, folder_name, type);
+		%>
+		location.href="controller.jsp?&action=load_picture_board";<%
+	}
 	else if(action.equals("load_board"))
 	{
 		String type=request.getParameter("type");
-		pageContext.forward("board.jsp");
+		ArrayList<String[]> list = db.load_post("*", type);
+		request.setAttribute("picture_list", list);
+		if(type.equals("free"))
+		{
+			pageContext.forward("board.jsp?type='자유게시판'");
+		}
+		else if(type.equals("graduate"))
+		{
+			pageContext.forward("board.jsp?type='졸업생게시판'");
+		}
+		else if(type.equals("qa"))
+		{
+			pageContext.forward("board.jsp?type='QnA'");
+		}
+		else if(type.equals("uggestions"))
+		{
+			pageContext.forward("board.jsp?type='건의사항'");
+		}
+	}
+	else if(action.equals("load_post_detail"))
+	{
+		String target = (String)request.getParameter("cnt");
+		String type=request.getParameter("type");
+		ArrayList<String[]> list = db.load_post(target, type);
+		request.setAttribute("picture_list", list);
+		pageContext.forward("picture_detail.jsp");
 	}
 	else if(action.equals("load_seminar_board"))
 	{
@@ -114,7 +148,8 @@ response.setContentType("text/html;charset=UTF-8");
 	else if(action.equals("remove_folder"))
 	{
 		String today = (String)session.getAttribute("folder_name");
-        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+		String type = (String)session.getAttribute("type");
+        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
        	if(folder.exists())
        	{        
        	File[] file_list = folder.listFiles();

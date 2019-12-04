@@ -14,7 +14,7 @@
    Connection conn = null;
    Statement stmt = null;
    String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://localhost:8080/cuvic?useUnicode=true&characterEncoding=UTF-8";
+	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8";
 	try {
       Class.forName(jdbc_driver);
       conn = DriverManager.getConnection(jdbc_url, "admin", "tkakrnl1");
@@ -31,7 +31,7 @@
    String encType = "UTF-8";
    String savefile = "image";
    ServletContext scontext = getServletContext();
-   realFolder ="/usr/local/tomcat8.5/webapps/cuvic_web_site/user_img";
+   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/user_img";	
    System.out.println(realFolder);
    try {
       
