@@ -45,6 +45,12 @@
 	padding: 10px 20px;
 	text-decoration: none;
 }
+ #contents1 table
+ {
+ border-bottom:solid #e5e5e5 4px;
+ table-layout: fixed;
+ text-align:center;
+ }
 .a li:hover>a{
 	color:pink;
 	text-decoration: none;
@@ -55,11 +61,28 @@
 }
 #post th, td{
 	border-bottom:solid #e5e5e5 2px;
+	padding-top:7px;padding-bottom:7px;
 }
-.flex-container {
-  margin: auto;
-  display: flex;
-  justify-content: space-around;
+
+#post a
+{
+	color: black;}
+}
+#post a:link 
+{
+	color: black;}
+}
+#post  a:visited
+{
+	color: black;}
+}
+#post a:active
+{
+	color: black;}
+}
+#post a:hover
+{
+	color: black;}
 }
 </style>
 
@@ -101,7 +124,7 @@
     function load_post()
 	{
 		<%
-		int n = 1,cnt=0, pcnt = 0;
+		int n = 1,cnt=1, pcnt = 0;
 		String type = (String)request.getParameter("type");
 		%>
 		var type;
@@ -121,36 +144,34 @@
 		{
 			type = "건의사항";	
 		}
-		$('#post').append("<table width='95%' id='group_<%=n%>' style='margin:auto;display:block; visibility:visible;'>"
+		$('#post').append("<table id='group_<%=n%>' style='margin:auto;'>"
+				+"<colgroup><col style='width:90px;'><col style='width:403px;'><col style='width:119px;'><col style='width:119px;'></colgroup>"
 				+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
 				+type+"</p></caption>"
-				+"<tr><th width='500px' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
-				+"<th width='150px' style='border-right:solid #e5e5e5 2px;'>작성자</th>"
-				+"<th width='150px'>작성일</th></tr></table>");
-		alert("<%=(ArrayList<String[]>)post_list.get(0)[0]%>");
-<%
+				+"<tr><th style='border-top:solid #e5e5e5 4px;'></th><th style='border-right:solid #e5e5e5 2px;  border-top:solid #e5e5e5 4px;'>글제목</th>"
+				+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th>"
+				+"<th style='border-top:solid #e5e5e5 4px;'>작성일</th></tr></table>");<%
 		for(String[] list : (ArrayList<String[]>)post_list)
 		{
-			if(cnt%16 == 0)
+			if(cnt%14 == 0)
 			{
 				n++;
-					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='margin:auto;display:none;visibility:hidden'>"
+					%>		$('#post').append("<table id='group_<%=n%>' style='margin:auto;display:none;visibility:hidden'>"
+							+"<colgroup><col style='width:90px;'><col style='width:403px;'><col style='width:119px;'><col style='width:119px;'></colgroup>"
 							+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
-							+"<%=(String)request.getParameter("type").replace("'","") %></p></caption>"
-							+"<tr><th width='500px' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
-							+"<th width='150px' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
-							+"<th width='150px'>작성일</th></tr></table>");
-					<%	
+							+type+"</p></caption>"
+							+"<tr><th style='border-top:solid #e5e5e5 4px;'></th><th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>글제목</th>"
+							+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th>"
+							+"<th style='border-top:solid #e5e5e5 4px;'>작성일</th></tr></table>");<%
 			}
 			%>
-			alert("<%=list[0]%>");
-			$('#group_<%=n%>').append("<tr><td style='padding-top:10px;padding-bottom:10px;'><%=list[0]%>  <%=list[3]%></td>"
-									 +"<td><%=list[2]%></td><td><%=list[1].split(" ")[0]%></td></tr>");
+			$('#group_<%=n%>').append("<tr><td><%=list[0]%></td><td style='border-right:solid #e5e5e5 2px;'><a href=controller.jsp?action=load_post_detail&cnt=<%=list[0]%>&type=<%=type%>><div style='max-width:403px;text-overflow:ellipsis; overflow:hidden; white-space:nowrap;'><%=list[3]%></div></a></td>"
+									 +"<td style='border-right:solid #e5e5e5 2px;'><%=list[2]%></td><td><%=list[1].split(" ")[0]%></td></tr>");
 		<%
 			cnt++;
 		}
-		%>
-		$('#post').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
+		%>$('#group_<%=n%>').append("<tr><td height='27px'></td><td></td><td></td><td></td></tr>");
+		$('#contents1').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
 		<%
 		for(int i = 1 ; i <= n ; i++)
 		{
@@ -226,7 +247,7 @@
 
 			<div id="contents1" style="height: 880px;">
 				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp?type=<%=type%>'">
-				<div id="post" style="clear:both;">
+				<div id="post" style="clear:both; margin-top:50px;">
 				</div>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">

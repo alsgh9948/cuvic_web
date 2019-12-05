@@ -55,6 +55,16 @@ if (request.getProtocol().equals("HTTP/1.1"))
 
 <script>
 	$(function() {
+		$("input:text").keydown(function(evt) {
+			if (evt.keyCode == 13) return false; 
+			});
+	    $("#title").on("change paste keyup", function() {
+	    	if(document.getElementById("title").value.length > 100)
+	    	{
+	    		alert("제목은 100자까지 입력 가능합니다.");
+	    		document.getElementById("title").value = document.getElementById("title").value.substring(0,100);
+	    	}
+	    	});
 		$(document).ready(function() {
 			var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			if(nick_name != "null")
@@ -149,7 +159,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 			<form action="controller.jsp" method="post" id="sb">
 				<input type="hidden" name="action" value="insert_post">
 				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
-				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
+				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
 			</form>

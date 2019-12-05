@@ -302,7 +302,7 @@ public class db_control {
 		try {
 			// 입력한 아이디가 이미 user 테이블에 있는지 검사
 			if(target.equals("*"))
-				sql = "select * from "+type+"_board order by date desc";
+				sql = "select * from "+type+"_board order by cnt desc";
 			else
 			{
 				sql = "select * from "+type+"_board where cnt="+target;

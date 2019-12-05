@@ -95,30 +95,15 @@ response.setContentType("text/html;charset=UTF-8");
 		String type = request.getParameter("type");
 		db.insert_post(data_get_set, nick_name, folder_name, type);
 		%>
-		location.href="controller.jsp?&action=load_post&type=<%=type%>";<%
+		location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
 	}
 	else if(action.equals("load_board"))
 	{
 		String type=request.getParameter("type");
 		ArrayList<String[]> list = db.load_post("*", type);
 		request.setAttribute("post_list", list);
-		if(type.equals("free"))
-		{
-			%>
-			location.href="board.jsp?type=free";<%
-		}
-		else if(type.equals("graduate"))
-		{
-			%>location.href="board.jsp?type=graduate";<%
-		}
-		else if(type.equals("qa"))
-		{
-			%>location.href="board.jsp?type=qa";<%
-		}
-		else if(type.equals("uggestions"))
-		{
-			%>location.href="board.jsp?type=uggestions";<%
-		}
+		request.setAttribute("type", type);
+		pageContext.forward("board.jsp");
 	}
 	else if(action.equals("load_post_detail"))
 	{
@@ -126,7 +111,8 @@ response.setContentType("text/html;charset=UTF-8");
 		String type=request.getParameter("type");
 		ArrayList<String[]> list = db.load_post(target, type);
 		request.setAttribute("post_list", list);
-		pageContext.forward("picture_detail.jsp");
+		request.setAttribute("type",type);
+		pageContext.forward("post_detail.jsp");
 	}
 	else if(action.equals("load_seminar_board"))
 	{
