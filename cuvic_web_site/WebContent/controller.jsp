@@ -92,31 +92,32 @@ response.setContentType("text/html;charset=UTF-8");
 	{
 		String nick_name = (String)session.getAttribute("nick_name");
 		String folder_name = (String)session.getAttribute("folder_name");
-		String type = (String)session.getAttribute("type");
+		String type = request.getParameter("type");
 		db.insert_post(data_get_set, nick_name, folder_name, type);
 		%>
-		location.href="controller.jsp?&action=load_picture_board";<%
+		location.href="controller.jsp?&action=load_post&type=<%=type%>";<%
 	}
 	else if(action.equals("load_board"))
 	{
 		String type=request.getParameter("type");
 		ArrayList<String[]> list = db.load_post("*", type);
-		request.setAttribute("picture_list", list);
+		request.setAttribute("post_list", list);
 		if(type.equals("free"))
 		{
-			pageContext.forward("board.jsp?type='자유게시판'");
+			%>
+			location.href="board.jsp?type=free";<%
 		}
 		else if(type.equals("graduate"))
 		{
-			pageContext.forward("board.jsp?type='졸업생게시판'");
+			%>location.href="board.jsp?type=graduate";<%
 		}
 		else if(type.equals("qa"))
 		{
-			pageContext.forward("board.jsp?type='QnA'");
+			%>location.href="board.jsp?type=qa";<%
 		}
 		else if(type.equals("uggestions"))
 		{
-			pageContext.forward("board.jsp?type='건의사항'");
+			%>location.href="board.jsp?type=uggestions";<%
 		}
 	}
 	else if(action.equals("load_post_detail"))
@@ -124,7 +125,7 @@ response.setContentType("text/html;charset=UTF-8");
 		String target = (String)request.getParameter("cnt");
 		String type=request.getParameter("type");
 		ArrayList<String[]> list = db.load_post(target, type);
-		request.setAttribute("picture_list", list);
+		request.setAttribute("post_list", list);
 		pageContext.forward("picture_detail.jsp");
 	}
 	else if(action.equals("load_seminar_board"))

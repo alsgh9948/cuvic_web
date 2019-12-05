@@ -297,7 +297,7 @@ public class db_control {
 	public ArrayList<String[]> load_post(String target, String type)
 	{
 		
-		ArrayList<String[]> picture_list = new ArrayList<String[]>();
+		ArrayList<String[]> post_list = new ArrayList<String[]>();
 		connect();
 		try {
 			// 입력한 아이디가 이미 user 테이블에 있는지 검사
@@ -317,16 +317,16 @@ public class db_control {
 				term_list[3] = rs.getString("title");
 				term_list[4] = rs.getString("contents");
 				term_list[5] = rs.getString("folder_name");
-				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+term_list[5]);
 		        File[] file_list = folder.listFiles();
-		        if(file_list.length == 0)
+		       if(file_list.length == 0)
 		        	term_list[6] = "-";
 		        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
 		        term_list[7] = rs.getString("views");
-				picture_list.add(term_list);
+		        post_list.add(term_list);
 			}
 			rs.close();
-			return picture_list;
+			return post_list;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

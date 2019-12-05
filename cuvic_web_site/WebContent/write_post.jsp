@@ -148,6 +148,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 			<div id="contents1">
 			<form action="controller.jsp" method="post" id="sb">
 				<input type="hidden" name="action" value="insert_post">
+				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
 				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">

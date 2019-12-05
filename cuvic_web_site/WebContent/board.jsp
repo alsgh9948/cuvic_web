@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<jsp:useBean id="picture_list" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="post_list" scope="request" class="java.util.ArrayList" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -101,35 +101,50 @@
     function load_post()
 	{
 		<%
-		int n = 0,cnt=0, pcnt = 0;
-		for(String[] list : (ArrayList<String[]>)picture_list)
+		int n = 1,cnt=0, pcnt = 0;
+		String type = (String)request.getParameter("type");
+		%>
+		var type;
+		if("<%=type%>" == "free")
+		{
+			type = "자유게시판";	
+		}
+		else if("<%=type%>" == "graduate")
+		{
+			type = "졸업생게시판";	
+		}
+		else if("<%=type%>" == "qa")
+		{
+			type = "Q&A";	
+		}
+		else if("<%=type%>" == "uggestions")
+		{
+			type = "건의사항";	
+		}
+		$('#post').append("<table width='95%' id='group_<%=n%>' style='margin:auto;display:block; visibility:visible;'>"
+				+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
+				+type+"</p></caption>"
+				+"<tr><th width='500px' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
+				+"<th width='150px' style='border-right:solid #e5e5e5 2px;'>작성자</th>"
+				+"<th width='150px'>작성일</th></tr></table>");
+		alert("<%=(ArrayList<String[]>)post_list.get(0)[0]%>");
+<%
+		for(String[] list : (ArrayList<String[]>)post_list)
 		{
 			if(cnt%16 == 0)
 			{
 				n++;
-				if(n < 2)
-				{
-					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='display:block; visibility:visible;'>"
-											+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
-											+"<%=(String)request.getParameter("type").replace("'","") %></p></caption>"
-											+"<tr><th width='70%' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
-											+"<th width='15%' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
-											+"<th width='15%'>작성일</th></tr></table>");
-					<%
-				}
-				else
-				{
-					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='display:none;visibility:hidden'>"
+					%>$('#post').append("<table width='95%' id='group_<%=n%>' style='margin:auto;display:none;visibility:hidden'>"
 							+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
 							+"<%=(String)request.getParameter("type").replace("'","") %></p></caption>"
-							+"<tr><th width='70%' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
-							+"<th width='15%' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
-							+"<th width='15%'>작성일</th></tr></table>");
-					<%
-				}	
+							+"<tr><th width='500px' style='border-right:solid #e5e5e5 2px;'>글제목</th>"
+							+"<th width='150px' style="border-right:solid #e5e5e5 2px;'>작성자</th>"
+							+"<th width='150px'>작성일</th></tr></table>");
+					<%	
 			}
 			%>
-			$('#group_<%=n%>').append("<tr><td style="padding-top:10px;padding-bottom:10px;"><%=list[0]%>  <%=list[3]%></td>
+			alert("<%=list[0]%>");
+			$('#group_<%=n%>').append("<tr><td style='padding-top:10px;padding-bottom:10px;'><%=list[0]%>  <%=list[3]%></td>"
 									 +"<td><%=list[2]%></td><td><%=list[1].split(" ")[0]%></td></tr>");
 		<%
 			cnt++;
@@ -210,7 +225,7 @@
 			</div>
 
 			<div id="contents1" style="height: 880px;">
-				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp'">
+				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp?type=<%=type%>'">
 				<div id="post" style="clear:both;">
 				</div>
 	  		</div>
