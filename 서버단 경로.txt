@@ -12,3 +12,19 @@ upload_picture.jsp
 db_control.java
 load_picture
 "/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]
+
+load_post
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+term_list[5]);
+
+post_attachement_download.jsp
+String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+folder_name;	
+
+post_attachement.jsp
+realFolder ="/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+folder_name;	
+
+post_detail.jsp
+String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+ postlist.get(0)[5];
+
+post_upload.jsp
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+(String)session.getAttribute("nick_name")+"_"+today);
+
