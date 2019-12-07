@@ -145,12 +145,12 @@
 			type = "건의사항";	
 		}
 		$('#post').append("<table id='group_<%=n%>' style='margin:auto;'>"
-				+"<colgroup><col style='width:90px;'><col style='width:403px;'><col style='width:119px;'><col style='width:119px;'></colgroup>"
+				+"<colgroup><col style='width:60px;'><col style='width:380px;'><col style='width:90px;'><col style='width:110px;'><col style='width:50px;'></colgroup>"
 				+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
 				+type+"</p></caption>"
 				+"<tr><th style='border-top:solid #e5e5e5 4px;'></th><th style='border-right:solid #e5e5e5 2px;  border-top:solid #e5e5e5 4px;'>글제목</th>"
-				+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th>"
-				+"<th style='border-top:solid #e5e5e5 4px;'>작성일</th></tr></table>");<%
+				+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th><th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성일</th>"
+				+"<th style='border-top:solid #e5e5e5 4px;'>조회</th></tr></table>");<%
 		for(String[] list : (ArrayList<String[]>)post_list)
 		{
 			if(cnt%14 == 0)
@@ -160,17 +160,17 @@
 							+"<colgroup><col style='width:90px;'><col style='width:403px;'><col style='width:119px;'><col style='width:119px;'></colgroup>"
 							+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
 							+type+"</p></caption>"
-							+"<tr><th style='border-top:solid #e5e5e5 4px;'></th><th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>글제목</th>"
-							+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th>"
-							+"<th style='border-top:solid #e5e5e5 4px;'>작성일</th></tr></table>");<%
+							+"<tr><th style='border-top:solid #e5e5e5 4px;'></th><th style='border-right:solid #e5e5e5 2px;  border-top:solid #e5e5e5 4px;'>글제목</th>"
+							+"<th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성자</th><th style='border-right:solid #e5e5e5 2px; border-top:solid #e5e5e5 4px;'>작성일</th>"
+							+"<th style='border-top:solid #e5e5e5 4px;'>조회</th></tr></table>");<%
 			}
 			%>
 			$('#group_<%=n%>').append("<tr><td><%=list[0]%></td><td style='border-right:solid #e5e5e5 2px;'><a href=controller.jsp?action=load_post_detail&cnt=<%=list[0]%>&type=<%=type%>><div style='max-width:403px;text-overflow:ellipsis; overflow:hidden; white-space:nowrap;'><%=list[3]%></div></a></td>"
-									 +"<td style='border-right:solid #e5e5e5 2px;'><%=list[2]%></td><td><%=list[1].split(" ")[0]%></td></tr>");
+									 +"<td style='border-right:solid #e5e5e5 2px;'><%=list[2]%></td><td  style='border-right:solid #e5e5e5 2px;'><%=list[1].split(" ")[0]%></td><td><%=list[7]%></td></tr>");
 		<%
 			cnt++;
 		}
-		%>$('#group_<%=n%>').append("<tr><td height='27px'></td><td></td><td></td><td></td></tr>");
+		%>$('#group_<%=n%>').append("<tr><td height='27px'></td><td></td><td></td><td></td><td></td></tr>");
 		$('#contents1').append("<div style='text-align: center;'><ul class ='a' id='page_button' style='margin: 0;padding: 0; display:inline-block;' ></ul></div>");
 		<%
 		for(int i = 1 ; i <= n ; i++)
@@ -246,7 +246,7 @@
 			</div>
 
 			<div id="contents1" style="height: 880px;">
-				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp?type=<%=type%>'">
+				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=type%>'">
 				<div id="post" style="clear:both; margin-top:50px;">
 				</div>
 	  		</div>

@@ -161,7 +161,13 @@ if (request.getProtocol().equals("HTTP/1.1"))
 				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
 				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
+			</form>
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
+				<input type="button" style="float:left; margin:5px 3px 0 0;" value="첨부파일 추가" onclick="add_attachment()">
+				<br>
+				<br>
+			<form action="post_attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment" target="if" style="both:clear;">
+				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
 			</form>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
@@ -220,7 +226,6 @@ nhn.husky.EZCreator.createInIFrame({
 	},
 	fCreator: "createSEditor2"
 });
-
 function pasteHTML() {
 	var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
 	oEditors.getById["contents"].exec("PASTE_HTML", [sHTML]);
@@ -251,6 +256,10 @@ function folder_check()
     folder.mkdirs();
     %>
 }
+function add_attachment()
+{
+	$('#attachment').append("<input type='file' name='fileName'>");
+}
 function remove_dir(){
 	if(flag == false)
 	{	
@@ -274,6 +283,7 @@ function submitContents(elClickedObj) {
 		return;
 	}
 	flag = true;
+	document.getElementById('attachment').submit();
 	document.getElementById("sb").submit();
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.

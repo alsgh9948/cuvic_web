@@ -103,7 +103,7 @@ response.setContentType("text/html;charset=UTF-8");
 		ArrayList<String[]> list = db.load_post("*", type);
 		request.setAttribute("post_list", list);
 		request.setAttribute("type", type);
-		pageContext.forward("board.jsp");
+		pageContext.forward("post_board.jsp");
 	}
 	else if(action.equals("load_post_detail"))
 	{

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*"%>
+    pageEncoding="UTF-8" import="java.util.*, java.io.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -99,11 +99,23 @@
     function load_picture()
 	{
 		<%
+		ArrayList<String[]> postlist = (ArrayList<String[]>)post_list;
+		String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+ postlist.get(0)[5];
+		File folder = new File(path);
+		File[] file_list;
+		String addtag="";
+		if(folder.exists())
+       	{        
+       	file_list = folder.listFiles();
+		for (int i = 0; i < file_list.length; i++)
+			addtag+="<a href=post_attachement_download.jsp?folder_name="+postlist.get(0)[5]+"&file_name="+file_list[i].getName()+">"+file_list[i].getName()+"</a><br>"; 
+		}	
 		int n = 0,cnt=0, pcnt = 0;
-		for(String[] list : (ArrayList<String[]>)post_list)
+		for(String[] list : postlist)
 		{
 			%>
-			$('#contents1').append('<p>제목 : <%=list[3]%></p><hr><p> 작성자 : <%=list[2]%> 작성일 : <%=list[1].split(" ")[0]%></p><hr>');
+			$('#contents1').append('<p>제목 : <%=list[3]%></p><hr><p> 작성자 : <%=list[2]%> 작성일 : <%=list[1].split(" ")[0]%> 조회수 : <%=list[7]%></p><hr>');
+			$('#contents1').append("<%=addtag%>");
 			$('#contents1').append('<%=list[4].replaceAll("(\r\n|\r|\n|\n\r)", "")%>'.replace(/\r/g, ''));
 			<%
 		}

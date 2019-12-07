@@ -27,7 +27,7 @@
    request.setCharacterEncoding("UTF-8");
    String realFolder;
    String filename1 = "";
-   int maxSize = 1024 * 1024 * 6;
+   int maxSize = 1024 * 1024 * 100;
    String encType = "UTF-8";
    String savefile = "image";
    ServletContext scontext = getServletContext();
