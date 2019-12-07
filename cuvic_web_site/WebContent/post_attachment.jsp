@@ -19,17 +19,10 @@
    String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
    String type = (String)session.getAttribute("type");
    realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+folder_name;	
+  
    try {
-	   	System.out.println("1");
-	      MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType);
-		   	System.out.println("2");
-	      Enumeration files = multi.getFileNames();
-	      while(files.hasMoreElements())
-	      {
-		      String file1 = (String) files.nextElement();
-		      filename1 = multi.getFilesystemName(file1);
-		      File file = new File( realFolder +"/"+ filename1 );
-	      }
+	      MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy());
+
 	      File[] file_list = new File(realFolder).listFiles();      
 		  for (int i = 0; i < file_list.length; i++) {
 			File file = new File(realFolder +"/"+file_list[i].getName());

@@ -165,7 +165,7 @@
 			</div>
 
 			<div id="contents1">
-				<input type="button" style="float:right;" value="사진등록" onClick="location.href='upload_picture.jsp'">
+				<input type="button" style="float:right;" value="사진등록" onClick="location.href='picture_upload.jsp'">
 				<br>
 				<br>
 			</div>

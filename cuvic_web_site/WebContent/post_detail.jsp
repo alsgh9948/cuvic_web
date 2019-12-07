@@ -177,7 +177,7 @@
 			</div>
 
 			<div id="contents1">
-				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='write_post.jsp?type=<%=(String)request.getParameter("type")%>'">
+				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=(String)request.getParameter("type")%>'">
 				<br>
 				<br>
 			</div>
