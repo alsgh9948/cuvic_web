@@ -1,17 +1,19 @@
 file_uploader_html5.jsp
-사진첩 upload 경로 : "/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+folder_name+"/";
+사진첩 upload 경로 : 
+"/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+folder_name+"/";
 "/cuvic_web_site/upload/"
 
 fileupload.jsp
-"/usr/local/tomcat8.5/webapps/cuvic_web_site/user_img"
+"/usr/local/tomcat8.5/webapps/cuvic_web_site/user_img";
 
 upload_picture.jsp
-"/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
+
 
 
 db_control.java
 load_picture
-"/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]);
 
 load_post
 File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+term_list[5]);
