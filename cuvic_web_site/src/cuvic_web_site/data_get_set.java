@@ -19,7 +19,7 @@ public class data_get_set {
 	private String date;
 	private String detail;
 	private String contents;
-	
+
 	public String getDetail() {
 		return detail;
 	}

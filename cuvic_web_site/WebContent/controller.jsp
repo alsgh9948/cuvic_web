@@ -88,15 +88,6 @@ response.setContentType("text/html;charset=UTF-8");
 		request.setAttribute("picture_list", list);
 		pageContext.forward("picture_board.jsp");
 	}
-	else if(action.equals("insert_post"))
-	{
-		String nick_name = (String)session.getAttribute("nick_name");
-		String folder_name = (String)session.getAttribute("folder_name");
-		String type = request.getParameter("type");
-		db.insert_post(data_get_set, nick_name, folder_name, type);
-		%>
-		location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
-	}
 	else if(action.equals("load_board"))
 	{
 		String type=request.getParameter("type");

@@ -108,8 +108,11 @@
        	{        
        	file_list = folder.listFiles();
 		for (int i = 0; i < file_list.length; i++)
+		{
+			if(file_list[i].isDirectory()) continue;
 			addtag+="<a href=post_attachement_download.jsp?folder_name="+postlist.get(0)[5]+"&file_name="+file_list[i].getName()+">"+file_list[i].getName()+"</a><br>"; 
 		}	
+		}
 		int n = 0,cnt=0, pcnt = 0;
 		for(String[] list : postlist)
 		{

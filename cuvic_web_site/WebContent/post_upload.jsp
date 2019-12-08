@@ -2,13 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.SimpleDateFormat,java.io.*"%>
-<%   
-response.setHeader("Cache-Control","no-store");   
-response.setHeader("Pragma","no-cache");   
-response.setDateHeader("Expires",0);   
-if (request.getProtocol().equals("HTTP/1.1")) 
-        response.setHeader("Cache-Control", "no-cache"); 
-%> 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -96,6 +90,26 @@ if (request.getProtocol().equals("HTTP/1.1"))
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
+    function folder_check()
+    {
+    	var title = document.getElementById("title").value;
+    	var contents = document.getElementById("contents").value;
+    	if(title != "" || contents != " ")
+    	{
+    		flag = true;
+    		alert("뒤로가기로 넘어와서 새로고침 해야함");
+    		location.reload();
+    	}
+    	<%
+    	Calendar calendar = Calendar.getInstance();
+        java.util.Date date = calendar.getTime();
+        String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
+        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+(String)session.getAttribute("nick_name")+"_"+today);
+    	session.setAttribute("folder_name", today);
+    	session.setAttribute("type", "post");
+        folder.mkdirs();
+        %>
+    }
 </script>
 <title>CUVIC</title>
 </head>
@@ -156,19 +170,18 @@ if (request.getProtocol().equals("HTTP/1.1"))
 				</div>
 			</div>
 			<div id="contents1">
-			<form action="controller.jsp" method="post" id="sb">
-				<input type="hidden" name="action" value="insert_post">
-				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
+			<form action="post_attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment">
+				<input type="hidden" name="type" id="type" value="<%=(String)request.getParameter("type")%>">
 				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
-				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
-			</form>
+				<input type="hidden" name="nick_name" value="<%=(String)session.getAttribute("nick_name")%>">
+				<input type="hidden" name="folder_name" value="<%=today%>">	
+				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>	
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
+				<br>
 				<input type="button" style="float:left; margin:5px 3px 0 0;" value="첨부파일 추가" onclick="add_attachment()">
 				<br>
-				<br>
-			<form action="post_attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment" target="if" style="both:clear;">
-				<input type="hidden" name="type" value="<%=(String)request.getParameter("type")%>">
-			</form>
+				<br>		
+				</form>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
@@ -236,26 +249,7 @@ function showHTML() {
 	alert(sHTML);
 }
 var flag = false;
-function folder_check()
-{
-	var title = document.getElementById("title").value;
-	var contents = document.getElementById("contents").value;
-	if(title != "" || contents != " ")
-	{
-		flag = true;
-		alert("뒤로가기로 넘어와서 새로고침 해야함");
-		location.reload();
-	}
-	<%
-	Calendar calendar = Calendar.getInstance();
-    java.util.Date date = calendar.getTime();
-    String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-    File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+(String)session.getAttribute("nick_name")+"_"+today);
-	session.setAttribute("folder_name", today);
-	session.setAttribute("type", "post");
-    folder.mkdirs();
-    %>
-}
+
 function add_attachment()
 {
 	$('#attachment').append("<input type='file' name='fileName'>");
@@ -270,6 +264,8 @@ function submitContents(elClickedObj) {
 	oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 	var title = document.getElementById("title").value;
 	var contents = document.getElementById("contents").value;
+	var type = document.getElementById("type").value;
+
 	if(title=="")
 	{
 		alert("제목을 입력하세요");
@@ -283,8 +279,7 @@ function submitContents(elClickedObj) {
 		return;
 	}
 	flag = true;
-	document.getElementById('attachment').submit();
-	document.getElementById("sb").submit();
+	document.getElementById("attachment").submit();
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
 	

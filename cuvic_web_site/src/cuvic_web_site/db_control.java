@@ -276,13 +276,13 @@ public class db_control {
 		}
 		return null;
 	}
-	public void insert_post(data_get_set value, String nick_name, String folder_name, String type) {
+	public void insert_post(String[] contents_list, String nick_name, String folder_name, String type) {
 		connect();
 		StringBuilder sb = new StringBuilder();
 		sql = sb.append("insert into "+type+"_board(writer_name,title,contents,folder_name) values('").
 				append(nick_name + "','")
-				.append(value.getTitle() + "','")
-				.append(value.getContents() + "','")
+				.append(contents_list[0] + "','")
+				.append(contents_list[1] + "','")
 				.append(nick_name+"_"+folder_name+ "');")
 				.toString();
 		try {

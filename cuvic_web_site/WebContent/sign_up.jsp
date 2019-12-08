@@ -39,17 +39,6 @@ response.setContentType("text/html;charset=UTF-8");
 </style>
 
 <script>
-	$(document).ready(function() {
-		var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
-		if(nick_name != "null")
-		{
-	        document.getElementById("login_before").style.display="none";
-	        document.getElementById("login_before").style.visibility="hidden";
-	
-	        document.getElementById("login_after").style.display="inline-block";
-	        document.getElementById("login_after").style.visibility="visible";
-		}
-	});
 	$(function() {
 		$.datepicker.setDefaults({
 		    dateFormat: 'yy-mm-dd' //Input Display Format 변경
@@ -84,17 +73,6 @@ response.setContentType("text/html;charset=UTF-8");
 				pw1.value="";
 				pw2.value="";
 				alert("비밀번호가 일치하지 않습니다.");
-			}
-		}
-		else if(type="nick")
-		{
-			var name = document.getElementById("name").value;
-			var club_num = document.getElementById("club_num").value;
-			var nick_name = document.getElementById("nick_name").value;
-			if(nick_name != club_num+" "+name){
-				alert("닉네임은 형식을 따라주세요");
-				document.getElementById("nick_name").value="";
-				location.href="#nick_name";
 			}
 		}
 	}
@@ -155,8 +133,8 @@ response.setContentType("text/html;charset=UTF-8");
  		pw_state=tre=true;
    	}
    	function SB(){
-   		var type=['id', 'password1', 'password2', 'name', 'phone', 'Email', 'birth', 'club_num', 'nick_name'];
-   		var name=['아이디', '비밀번호', '비밀번호', '이름', '핸드폰 번호', '이메일', '생년월일', '동아리 기수', '닉네임'];
+   		var type=['id', 'password1', 'password2', 'name', 'phone', 'Email', 'birth', 'club_num'];
+   		var name=['아이디', '비밀번호', '비밀번호', '이름', '핸드폰 번호', '이메일', '생년월일', '동아리 기수'];
    		
    		if(id_state == false)
 		{
@@ -168,7 +146,7 @@ response.setContentType("text/html;charset=UTF-8");
    			return;
    		}
 
-   		for(var i = 0 ; i < 9 ; i++)
+   		for(var i = 0 ; i < 8 ; i++)
    		{
    			if(document.getElementById(type[i]).value == '')
    			{
@@ -187,6 +165,7 @@ response.setContentType("text/html;charset=UTF-8");
 			document.getElementsByName("user_gender")[0].value = "w";
 		}
 		document.getElementById("email").value = document.getElementById("Email").value + "@" + document.getElementById("Addr").value;
+		document.getElementById("nick_name").value = document.getElementById("club_num").value+"기"+document.getElementById("name").value;
    		document.getElementById("sign").submit();
    		document.getElementById("img").submit();
    	}
@@ -252,6 +231,7 @@ response.setContentType("text/html;charset=UTF-8");
 			<div id="contents" style="height: 1100px;">
 				<form method="post" action="controller.jsp" id="sign"  target="if" >
 					<input type="hidden" name="action" value="sign_up">
+					<input type="hidden" name="nick_name" id="nick_name" value="">
 					<span>
 						<p>아이디</p>
 						<input type="text" id="id" name="id" placeholder="아이디" required>
@@ -283,11 +263,8 @@ response.setContentType("text/html;charset=UTF-8");
 					<input id="email_address" type="text" style="display:none">				
 					<p>생년월일</p>
 					<input type="text" id="birth" name="birth" required>
-					<p">동아리 기수</p>
+					<p>동아리 기수</p>
 					<input type="number" name="club_num" id="club_num" placeholder="동아리 기수" required><br><br>
-					<p>닉네임</p>
-					<input type="text" name="nick_name" id="nick_name" placeholder="닉네임" onchange="check('nick')" required><br><br>
-					<p>동아리 기수 이름 형식으로 해주세요 (ex:20기 홍길동)</p>
 					<p>근무지</p>
 					<input type="text" name="work_place" placeholder="근무지" required><br><br>
 					<textarea cols="60" rows="5" name="comment" id="comment" style="resize:none;"></textarea>
@@ -321,13 +298,6 @@ response.setContentType("text/html;charset=UTF-8");
 					<button name="login" style="float: right; width:100px; height:69px;">Login</button>
 					<input type="button" style="float: left; width:45%; margin-top:5px;" onclick="location.href='sign_up.jsp'" value="회원가입">
 					<button style="width:45%; float:right; margin-top:5px;" onclick="window.open('main.jsp','아이디/비번찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">회원정보 찾기</button>
-				</form>
-	  		</div>
-	  		<div id="login_after" style="padding: 5px; visibility:hidden; display:none;">
-				<form method="post" action="controller.jsp">
-					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
-					<input type="hidden" name="action" value="logout">
-					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
 				</form>
 	  		</div>
 	  		<div id="event_list">
