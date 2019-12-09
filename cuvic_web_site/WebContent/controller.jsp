@@ -84,26 +84,69 @@ response.setContentType("text/html;charset=UTF-8");
 	}
 	else if(action.equals("load_picture_board"))
 	{
-		ArrayList<String[]> list = db.load_picture("*");
-		request.setAttribute("picture_list", list);
-		pageContext.forward("picture_board.jsp");
+		if((String)session.getAttribute("nick_name")==null)
+		{
+		%>
+			alert("로그인후에 이용해주세요");
+	        location.href="main.jsp";
+		<%
+		}
+		else
+		{	
+			ArrayList<String[]> list = db.load_picture("*");
+			request.setAttribute("picture_list", list);
+			pageContext.forward("picture_board.jsp");
+		}
 	}
 	else if(action.equals("load_board"))
 	{
 		String type=request.getParameter("type");
-		ArrayList<String[]> list = db.load_post("*", type);
-		request.setAttribute("post_list", list);
-		request.setAttribute("type", type);
-		pageContext.forward("post_board.jsp");
+		ArrayList<String[]> list=null;
+		String board_type = (String)session.getAttribute("type");
+		
+		if((String)session.getAttribute("nick_name")==null)
+		{
+		%>
+			alert("로그인후에 이용해주세요");
+	        location.href="main.jsp";
+		<%
+		}
+		else
+		{	
+			if(type.equals("seminar"))			
+				list = db.load_post("*", type, request.getParameter("year"));
+			else
+				list = db.load_post("*", type, "-");
+			request.setAttribute("post_list", list);
+			request.setAttribute("type", type);
+			pageContext.forward("post_board.jsp");
+		}
 	}
 	else if(action.equals("load_post_detail"))
 	{
-		String target = (String)request.getParameter("cnt");
-		String type=request.getParameter("type");
-		ArrayList<String[]> list = db.load_post(target, type);
-		request.setAttribute("post_list", list);
-		request.setAttribute("type",type);
-		pageContext.forward("post_detail.jsp");
+		if((String)session.getAttribute("nick_name")==null)
+		{
+		%>
+			alert("로그인후에 이용해주세요");
+	        location.href="main.jsp";
+		<%
+		}
+		else
+		{
+			String target = (String)request.getParameter("cnt");
+			String type=request.getParameter("type");
+			String board_type = (String)session.getAttribute("type");
+			String year = request.getParameter("year");
+			ArrayList<String[]> list = null;
+			if(type.equals("seminar"))		
+				list = db.load_post(target, type,year);
+			else
+				list = db.load_post(target, type,"-");
+			request.setAttribute("post_list", list);
+			request.setAttribute("type",type);
+			pageContext.forward("post_detail.jsp");
+
+		}
 	}
 	else if(action.equals("load_seminar_board"))
 	{
@@ -139,11 +182,21 @@ response.setContentType("text/html;charset=UTF-8");
     }
 	else if(action.equals("load_picture_detail"))
 	{
-		String target = (String)request.getParameter("cnt");
-		ArrayList<String[]> list = db.load_picture(target);
-		request.setAttribute("picture_list", list);
-		pageContext.forward("picture_detail.jsp");
+		if((String)session.getAttribute("nick_name")==null)
+		{
+		%>
+			alert("로그인후에 이용해주세요");
+	        location.href="main.jsp";
+		<%
+		}
+		else
+		{
+			String target = (String)request.getParameter("cnt");
+			ArrayList<String[]> list = db.load_picture(target);
+			request.setAttribute("picture_list", list);
+			pageContext.forward("picture_detail.jsp");
 	}
+   }
 	%>
 	</script>
 <body>

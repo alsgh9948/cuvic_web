@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<% request.setCharacterEncoding("UTF-8");
+    pageEncoding="UTF-8" import="java.util.*"%><% request.setCharacterEncoding("UTF-8");
 response.setContentType("text/html;charset=UTF-8");
  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,6 +7,7 @@ response.setContentType("text/html;charset=UTF-8");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<jsp:useBean id="db" class="cuvic_web_site.db_control" />
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@ response.setContentType("text/html;charset=UTF-8");
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<link rel="stylesheet" type="text/css" href="css/main.css?version=1">
+<link rel="stylesheet" type="text/css" href="css/main.css?version=2">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 
@@ -44,7 +44,7 @@ response.setContentType("text/html;charset=UTF-8");
 		    dateFormat: 'yy-mm-dd' //Input Display Format 변경
 		});
 
-		$("#birth").datepicker();
+		$("#birthday").datepicker();
 		$(".zeta-menu li").hover(function() {
 			$('ul:first', this).show();
 		}, function() {
@@ -57,7 +57,26 @@ response.setContentType("text/html;charset=UTF-8");
 				"<p style='float:right;margin:-3px'>&#9656;</p>");
 	});
     $(document).ready(function(){
-      $('.slider').bxSlider();
+        <%
+        ArrayList<String[]> lately_list = db.lately_post();
+    	for(String[] post : lately_list)
+    	{
+  			String board = post[1].split("_")[0];
+  			if(board.equals("picture"))
+  			{
+  				%>
+  	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+  	    		<%	
+  			}
+  			else
+  			{
+  				%>
+  	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+  	    		<%
+  			}
+  			
+    	}
+        %>
     });
     
     function check(type){
@@ -76,19 +95,6 @@ response.setContentType("text/html;charset=UTF-8");
 			}
 		}
 	}
-   	function info_open_check(){
-   		var check = document.getElementsByName("info_open");
-   		var r = "";
-   		for(var i = 0 ;i < check.length ; i++)
-   		{
-   			if(check[i].checked)	
-   			{
-   				r += check[i].value;	
-   			}
-   		}
-   		document.getElementsByName("open_state")[0].value=r;
-   		alert(document.getElementsByName("open_state")[0].value);
-   	}
    	var id_state=false,pw_state=false;
 	function id_check()
    	{
@@ -118,9 +124,9 @@ response.setContentType("text/html;charset=UTF-8");
    	}
    	function pw_check(){
  		var password = document.getElementsByName("password")[0].value;
- 		if(password.length < 5 || password.length > 10)
+ 		if(password.length < 5 || password.length > 15)
    		{
-   			alert("비밀번호는 5 ~ 10 자리입니다");
+   			alert("비밀번호는 5 ~ 15 자리입니다");
    			return;
  		}
  		for(var i = 0 ; i < password.length ; i++){
@@ -133,7 +139,7 @@ response.setContentType("text/html;charset=UTF-8");
  		pw_state=tre=true;
    	}
    	function SB(){
-   		var type=['id', 'password1', 'password2', 'name', 'phone', 'Email', 'birth', 'club_num'];
+   		var type=['id', 'password1', 'password2', 'name', 'phone', 'Email', 'birthday', 'club_num'];
    		var name=['아이디', '비밀번호', '비밀번호', '이름', '핸드폰 번호', '이메일', '생년월일', '동아리 기수'];
    		
    		if(id_state == false)
@@ -181,12 +187,6 @@ response.setContentType("text/html;charset=UTF-8");
 <body>
 	<div class="wrapper">
 		<div id=user_info align="right">
-			<table>
-				<tr>
-					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()">로그아웃</button></td>
-				</tr>
-			</table>
 			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
@@ -214,21 +214,25 @@ response.setContentType("text/html;charset=UTF-8");
 								<li><a href="controller.jsp?&action=load_board&type=qa">Q&A</a></li>
 								<li><a href="controller.jsp?&action=load_board&type=uggestions">건의사항</a></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_seminar_board&year=2019">세미나</a>
+						<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">세미나</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_seminar_board&year=2019">2019년</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">2019년</a>
+								<ul>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">1학년</a></li>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_2학년">2학년</a></li>
+								</ul></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_data_board">자료실</a>
+						<li><a href="controller.jsp?&action=load_board&type=job">자료실</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_data_board&type=job">취업자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=exam">시험자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=homework">과제공유</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=etc">기타</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=job">취업자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=exam">시험자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=assignment">과제공유</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=etc">기타</a></li>
 							</ul></li>
 					</ul>
 				</div>
 			</div>
-			<div id="contents" style="height: 1100px;">
+			<div id="contents" style="height: 880px;">
 				<form method="post" action="controller.jsp" id="sign"  target="if" >
 					<input type="hidden" name="action" value="sign_up">
 					<input type="hidden" name="nick_name" id="nick_name" value="">
@@ -236,14 +240,12 @@ response.setContentType("text/html;charset=UTF-8");
 						<p>아이디</p>
 						<input type="text" id="id" name="id" placeholder="아이디" required>
 						<input type="button" value="중복체크" onclick="id_check()">
-						<p>5~10자, 알파벳, 숫자 가능</p>
+						<p>5~15자, 알파벳, 숫자 가능</p>
 					</span>
 					<span>
-						<p>비밀번호</p>
-						<input type="password" name="password" id="password1" placeholder="비밀번호" onchange="pw_check()" required>
-						<p>비밀번호 확인</p>
-						<input type="password" placeholder="비밀번호 확인" id="password2" onchange="check('pw')" required>
-						<p>5~10자, 알파벳, 숫자 가능</p>
+						<span>비밀번호 : </span><input type="password" name="password" id="password1" placeholder="비밀번호" onchange="pw_check()" required>
+						<span>비밀번호 확인 : </span><input type="password" placeholder="비밀번호 확인" id="password2" onchange="check('pw')" required></span>
+						<p>5~15자, 알파벳, 숫자 가능</p>
 					</span>
 					<p>이름</p>
 					<input type="text" name="name" id="name" placeholder="이름"><br><br>
@@ -262,32 +264,24 @@ response.setContentType("text/html;charset=UTF-8");
 					<input type="hidden" id="email" name="email" value="">
 					<input id="email_address" type="text" style="display:none">				
 					<p>생년월일</p>
-					<input type="text" id="birth" name="birth" required>
+					<input type="text" id="birthday" name="birth" required>
 					<p>동아리 기수</p>
 					<input type="number" name="club_num" id="club_num" placeholder="동아리 기수" required><br><br>
 					<p>근무지</p>
 					<input type="text" name="work_place" placeholder="근무지" required><br><br>
 					<textarea cols="60" rows="5" name="comment" id="comment" style="resize:none;"></textarea>
-					<hr style="border:1px solid black;" required>
-					<span>
-						<p>정보 공개여부</p>
-						<lable>핸드폰 번호</lable><input type="checkbox" name="info_open" value="1" onclick="info_open_check()">
-						<lable>생년월일</lable><input type="checkbox" name="info_open" value="2" onclick="info_open_check()">
-						<lable>근무지</lable><input type="checkbox" name="info_open" value="3" onclick="info_open_check()">
-						<lable>사진</lable><input type="checkbox" name="info_open" value="4" onclick="info_open_check()">
-					</span>
-					<input type="hidden" name="open_state" value=""><br>
+					<hr style="border:1px solid black;" required><br>
 				</form>
 			<form action="fileupload.jsp" method="post" enctype="Multipart/form-data" id="img">
 				<input type="hidden" name="user_id" value="">
 				<input type="hidden" name="user_gender" value="">
-				파일명 : <input type="file" name="fileName1"  accept="image/*">
+				프로필 사진 : <input type="file" name="fileName1"  accept="image/*">
 			</form>
 					<input type="button" style="float: left; width:45%; margin-top:5px;" onclick="SB()" value="회원가입">
 					<input type="button" onclick="location.href='main.jsp'" value="취소">
 		</div>
 	  		<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
-	  		<div id="login_before" style="padding: 5px;">
+	  			  		<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
 				<form method="post" action="controller.jsp">
 					<input type="hidden" name="action" value="login">
@@ -300,14 +294,22 @@ response.setContentType("text/html;charset=UTF-8");
 					<button style="width:45%; float:right; margin-top:5px;" onclick="window.open('main.jsp','아이디/비번찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">회원정보 찾기</button>
 				</form>
 	  		</div>
-	  		<div id="event_list">
-	  			<h1>이달의 행사</h1>
+	  		<div id="login_after" style="padding: 5px; visibility:hidden; display:none;">
+				<form method="post" action="controller.jsp">
+					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
+					<input type="hidden" name="action" value="logout">
+					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
+				</form>
 	  		</div>
-	  		<div id="new_post">
-	  			<h1>최신글</h1>
+	  		<div id="birth">
+	  			<p>이달의 생일</p>
+	  		</div>
+	  	    <div id="new_post" style="height:400px;">
+	  			<p>최신글</p>
 	  		</div>
 	<div id="footer">
 		<h1>뭐넣지</h1>
+	</div>
 	</div>
 </body>
 </html>

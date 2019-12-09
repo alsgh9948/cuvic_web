@@ -41,11 +41,14 @@
   	padding:5px 5px 5px 5px;
   	float:right;
   	}
-  img
+  #contents1 img
   	{
   	width:100%;
   	}
 </style>
+	<%
+String nick_name = (String)session.getAttribute("nick_name");
+%>
 
 <script>
 	$(function() {
@@ -68,7 +71,11 @@
 	
 	            document.getElementById("login_after").style.display="inline-block";
 	            document.getElementById("login_after").style.visibility="visible";
+	            
+	            document.getElementById("user_info").style.display="inline-block";
+	            document.getElementById("user_info").style.visibility="visible";
 			}
+		}
 		});
 		$(".zeta-menu li").hover(function() {
 			$('ul:first', this).show();
@@ -100,6 +107,11 @@
     		alert("뒤로가기로 넘어와서 새로고침 해야함");
     		location.reload();
     	}
+    	if("<%=nick_name%>" == "null")
+		{
+        alert("로그인후에 이용해주세요");
+        location.href="main.jsp";
+		}
     	<%
     	Calendar calendar = Calendar.getInstance();
         java.util.Date date = calendar.getTime();
@@ -109,6 +121,7 @@
     	session.setAttribute("type", "post");
         folder.mkdirs();
         %>
+        document.getElementById("year").value ="<%=request.getParameter("year")%>";
     }
 </script>
 <title>CUVIC</title>
@@ -121,14 +134,14 @@
 		<input type="hidden" name="type" value="post"> 
 	</form>
 	<div class="wrapper">
-		<div id=user_info align="right">
-			<table>
+		<div align="right">
+			<table id="user_info" style="visibility:hidden; display:none;">
 				<tr>
-					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()">로그아웃</button></td>
+					<td style="padding-right: 20px;"><p><%=nick_name %></p></td>
+					<td><button onclick="location.href='controller.jsp?action=logout'">로그아웃</button></td>
 				</tr>
 			</table>
-			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
+			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -155,26 +168,32 @@
 								<li><a href="controller.jsp?&action=load_board&type=qa">Q&A</a></li>
 								<li><a href="controller.jsp?&action=load_board&type=uggestions">건의사항</a></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_seminar_board&year=2019">세미나</a>
+						<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">세미나</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_seminar_board&year=2019">2019년</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">2019년</a>
+								<ul>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">1학년</a></li>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_2학년">2학년</a></li>
+								</ul></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_data_board">자료실</a>
+						<li><a href="controller.jsp?&action=load_board&type=job">자료실</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_data_board&type=job">취업자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=exam">시험자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=homework">과제공유</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=etc">기타</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=job">취업자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=exam">시험자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=assignment">과제공유</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=etc">기타</a></li>
 							</ul></li>
 					</ul>
 				</div>
 			</div>
 			<div id="contents1">
-			<form action="post_attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment">
+			<form action="attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment">
 				<input type="hidden" name="type" id="type" value="<%=(String)request.getParameter("type")%>">
-				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
 				<input type="hidden" name="nick_name" value="<%=(String)session.getAttribute("nick_name")%>">
 				<input type="hidden" name="folder_name" value="<%=today%>">	
+				<input type="hidden" name="year" id="year" value="">	
+
+				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>	
 				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
 				<br>

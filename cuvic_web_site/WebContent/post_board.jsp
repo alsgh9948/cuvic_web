@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:useBean id="post_list" scope="request" class="java.util.ArrayList" />
-
+<jsp:useBean id="db" class="cuvic_web_site.db_control" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,7 +13,7 @@
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="css/main.css?version=1">
+<link rel="stylesheet" type="text/css" href="css/main.css?version=2">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 
@@ -59,7 +59,7 @@
 	border-bottom:solid #e5e5e5 2px;
 	text-align:center;
 }
-#post th, td{
+#post th, #post td{
 	border-bottom:solid #e5e5e5 2px;
 	padding-top:7px;padding-bottom:7px;
 }
@@ -85,10 +85,32 @@
 	color: black;}
 }
 </style>
-
+	<%
+String nick_name = (String)session.getAttribute("nick_name");
+%>
 <script>
 	$(function() {
 		$(document).ready(function() {
+			<%
+			ArrayList<String[]> lately_list = db.lately_post();
+			for(String[] post : lately_list)
+			    	{
+						String board = post[1].split("_")[0];
+						if(board.equals("picture"))
+						{
+							%>
+				    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+				    		<%	
+						}
+						else
+						{
+							%>
+				    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+				    		<%
+						}
+						
+			    	}
+			%>
 			var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			if(nick_name != "null")
 			{
@@ -97,6 +119,9 @@
 	
 	            document.getElementById("login_after").style.display="inline-block";
 	            document.getElementById("login_after").style.visibility="visible";
+	            
+	            document.getElementById("user_info").style.display="inline-block";
+	            document.getElementById("user_info").style.visibility="visible";
 			}
 		});
 		$(".zeta-menu li").hover(function() {
@@ -123,27 +148,17 @@
 
     function load_post()
 	{
-		<%
+    	<%
 		int n = 1,cnt=1, pcnt = 0;
 		String type = (String)request.getParameter("type");
+		String seminar = request.getParameter("year");
+		if(seminar != null)
+			seminar = seminar.replace("_","년 ");
 		%>
 		var type;
-		if("<%=type%>" == "free")
-		{
-			type = "자유게시판";	
-		}
-		else if("<%=type%>" == "graduate")
-		{
-			type = "졸업생게시판";	
-		}
-		else if("<%=type%>" == "qa")
-		{
-			type = "Q&A";	
-		}
-		else if("<%=type%>" == "uggestions")
-		{
-			type = "건의사항";	
-		}
+		var type_list = {"notice":"공지사항","free":"자유게시판","graduate":"졸업생게시판","qa":"Q&A","uggestions":"건의사항","seminar":"<%=seminar%>","job":"취업자료","exam":"취업자료","assignment":"과제공유","etc":"기타"};
+		type = type_list["<%=type%>"];
+
 		$('#post').append("<table id='group_<%=n%>' style='margin:auto;'>"
 				+"<colgroup><col style='width:60px;'><col style='width:380px;'><col style='width:90px;'><col style='width:110px;'><col style='width:50px;'></colgroup>"
 				+"<caption><p style='font-size:30px; font-weight:bold; text-align:center; margin:auto; padding-bottom:20px;'>"
@@ -196,14 +211,14 @@
 
 <body onload="load_post()">
 	<div class="wrapper">
-		<div id=user_info align="right">
-			<table>
+		<div align="right">
+			<table id="user_info" style="visibility:hidden; display:none;">
 				<tr>
-					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()"">로그아웃</button></td>
+					<td style="padding-right: 20px;"><p><%=nick_name %></p></td>
+					<td><button onclick="location.href='controller.jsp?action=logout'">로그아웃</button></td>
 				</tr>
 			</table>
-			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
+			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -230,23 +245,27 @@
 								<li><a href="controller.jsp?&action=load_board&type=qa">Q&A</a></li>
 								<li><a href="controller.jsp?&action=load_board&type=uggestions">건의사항</a></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_seminar_board&year=2019">세미나</a>
+						<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">세미나</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_seminar_board&year=2019">2019년</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">2019년</a>
+								<ul>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">1학년</a></li>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_2학년">2학년</a></li>
+								</ul></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_data_board">자료실</a>
+						<li><a href="controller.jsp?&action=load_board&type=job">자료실</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_data_board&type=job">취업자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=exam">시험자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=homework">과제공유</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=etc">기타</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=job">취업자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=exam">시험자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=assignment">과제공유</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=etc">기타</a></li>
 							</ul></li>
 					</ul>
 				</div>
 			</div>
 
 			<div id="contents1" style="height: 880px;">
-				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=type%>'">
+				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=type%>&year=<%=request.getParameter("year")%>'">
 				<div id="post" style="clear:both; margin-top:50px;">
 				</div>
 	  		</div>
@@ -270,14 +289,15 @@
 					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
 				</form>
 	  		</div>
-	  		<div id="event_list">
-	  			<h1>이달의 행사</h1>
+			<div id="birth">
+	  			<p>이달의 생일</p>
 	  		</div>
-	  		<div id="new_post">
-	  			<h1>최신글</h1>
-	  		</div>	  		
+	  	    <div id="new_post" style="height:400px;">
+	  			<p>최신글</p>
+	  		</div>  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
+	</div>
 	</div>
 </body>
 </html>

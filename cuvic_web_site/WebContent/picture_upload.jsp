@@ -47,11 +47,14 @@ if (request.getProtocol().equals("HTTP/1.1"))
   	padding:5px 5px 5px 5px;
   	float:right;
   	}
-  img
+  #contents1 img
   	{
   	width:100%;
   	}
 </style>
+	<%
+String nick_name = (String)session.getAttribute("nick_name");
+%>
 
 <script>
 	$(function() {
@@ -64,7 +67,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 		    		alert("제목은 100자까지 입력 가능합니다.");
 		    		document.getElementById("title").value = document.getElementById("title").value.substring(0,100);
 		    	}
-		    	});
+		    });
 		$(document).ready(function() {
 			var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
 			if(nick_name != "null")
@@ -74,6 +77,9 @@ if (request.getProtocol().equals("HTTP/1.1"))
 	
 	            document.getElementById("login_after").style.display="inline-block";
 	            document.getElementById("login_after").style.visibility="visible";
+	            
+	            document.getElementById("user_info").style.display="inline-block";
+	            document.getElementById("user_info").style.visibility="visible";
 			}
 		});
 		$(".zeta-menu li").hover(function() {
@@ -107,14 +113,14 @@ if (request.getProtocol().equals("HTTP/1.1"))
 		<input type="hidden" name="type" value="upload"> 
 	</form>
 	<div class="wrapper">
-		<div id=user_info align="right">
-			<table>
+		<div align="right">
+			<table id="user_info" style="visibility:hidden; display:none;">
 				<tr>
-					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()">로그아웃</button></td>
+					<td style="padding-right: 20px;"><p><%=nick_name %></p></td>
+					<td><button onclick="location.href='controller.jsp?action=logout'">로그아웃</button></td>
 				</tr>
 			</table>
-			<a href="main.jsp"><img src="img/logo.png"style="display: block; margin: auto; padding-bottom: 20px; width:300px !important;"></a>
+			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
 		</div>
 						<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -141,16 +147,20 @@ if (request.getProtocol().equals("HTTP/1.1"))
 								<li><a href="controller.jsp?&action=load_board&type=qa">Q&A</a></li>
 								<li><a href="controller.jsp?&action=load_board&type=uggestions">건의사항</a></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_seminar_board&year=2019">세미나</a>
+						<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">세미나</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_seminar_board&year=2019">2019년</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">2019년</a>
+								<ul>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">1학년</a></li>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_2학년">2학년</a></li>
+								</ul></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_data_board">자료실</a>
+						<li><a href="controller.jsp?&action=load_board&type=job">자료실</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_data_board&type=job">취업자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=exam">시험자료</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=homework">과제공유</a></li>
-								<li><a href="controller.jsp?&action=load_data_board&type=etc">기타</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=job">취업자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=exam">시험자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=assignment">과제공유</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=etc">기타</a></li>
 							</ul></li>
 					</ul>
 				</div>
@@ -193,6 +203,7 @@ if (request.getProtocol().equals("HTTP/1.1"))
 	<div id="footer">
 		<h1>뭐넣지</h1>
 	</div>
+	</div>
 	<script type="text/javascript">
 	
 var oEditors = [];
@@ -232,6 +243,11 @@ function showHTML() {
 var flag = false;
 function folder_check()
 {
+	if("<%=nick_name%>" == "null")
+	{
+    alert("로그인후에 이용해주세요");
+    location.href="main.jsp";
+	}
 	var title = document.getElementById("title").value;
 	var contents = document.getElementById("contents").value;
 	if(title != "" || contents != " ")

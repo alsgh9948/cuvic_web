@@ -52,6 +52,73 @@ public class db_control {
 		}
 	}
 
+	public ArrayList<ArrayList<String[]>> load_main_page_post()
+	{
+		ArrayList<ArrayList<String[]>> post_list = new ArrayList<ArrayList<String[]>>();
+		String table_list[] = {"notice_board","free_board","picture_board","etc_board"};
+		connect();
+		try {
+			for(String table_name : table_list)
+			{
+				sql = "select * from "+table_name+" limit 8";
+				rs = st.executeQuery(sql);
+				ArrayList<String[]> list = new ArrayList<String[]>();
+				while(rs.next()) {
+					String[] term_list = new String[9];
+					term_list[0] = rs.getString("cnt");
+					term_list[1] = rs.getString("date");
+					term_list[2] = rs.getString("writer_name");
+					term_list[3] = rs.getString("title");
+					term_list[4] = rs.getString("contents");
+					term_list[5] = rs.getString("folder_name");
+					File folder=null;
+					if(table_name.equals("picture_board"))
+						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+					else
+						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+term_list[5]);
+			        File[] file_list = folder.listFiles();
+			       if(file_list.length == 0)
+			        	term_list[6] = "-";
+			        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
+			        term_list[7] = rs.getString("views");
+			        list.add(term_list);
+				}
+				post_list.add(list);
+				rs.close();
+			}
+			return post_list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return null;
+	}
+	public ArrayList<String[]> lately_post()
+	{
+		ArrayList<String[]> post_list = new ArrayList<String[]>();
+		connect();
+		try {
+			sql = "select *  from post_list order by date desc limit 8";
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				String[] term_list = new String[5];
+				term_list[0] = rs.getString("cnt");
+				term_list[1] = rs.getString("board_name");
+				term_list[2] = rs.getString("title");
+				term_list[3] = rs.getString("writer_name");
+				term_list[4] = rs.getString("date");
+				post_list.add(term_list);
+			}
+			rs.close();
+			return post_list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return null;
+	}
 	// 회원가입 처리 함수
 	public boolean sign_up(data_get_set value) {
 		connect();
@@ -229,7 +296,26 @@ public class db_control {
 				.toString();
 		try {
 			st.executeUpdate(sql);
-
+			sql = "select * from picture_board order by date desc limit 1";
+			rs = st.executeQuery(sql);
+			String[] arr = new String[5];
+			while(rs.next()) {
+				arr[0] = rs.getString("cnt");
+				arr[1] = "picture_board";
+				arr[2] = rs.getString("title");
+				arr[3] = rs.getString("writer_name");
+				arr[4] = rs.getString("date");
+			}
+			rs.close();
+			sb = new StringBuilder();
+			sql = sb.append("insert into post_list values('").
+					append(arr[0] + "','")
+					.append(arr[1] + "','")
+					.append(arr[2] + "','")
+					.append(arr[3] + "','")	
+					.append(arr[4]+ "');")
+					.toString();
+			st.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -276,16 +362,46 @@ public class db_control {
 		}
 		return null;
 	}
-	public void insert_post(String[] contents_list, String nick_name, String folder_name, String type) {
+	public void insert_post(String[] contents_list, String nick_name, String folder_name, String type, String year) {
 		connect();
 		StringBuilder sb = new StringBuilder();
-		sql = sb.append("insert into "+type+"_board(writer_name,title,contents,folder_name) values('").
+		if(type.equals("seminar"))
+			sql = sb.append("insert into "+type+"_board(writer_name,title,contents,folder_name,year) values('").
+			append(nick_name + "','")
+			.append(contents_list[0] + "','")
+			.append(contents_list[1] + "','")
+			.append(nick_name+"_"+folder_name+ "','")
+			.append(year + "');")
+			.toString();
+		else
+			sql = sb.append("insert into "+type+"_board(writer_name,title,contents,folder_name) values('").
 				append(nick_name + "','")
 				.append(contents_list[0] + "','")
 				.append(contents_list[1] + "','")
 				.append(nick_name+"_"+folder_name+ "');")
 				.toString();
 		try {
+			st.executeUpdate(sql);
+			sql = "select * from "+type+"_board order by date desc limit 1";
+			rs = st.executeQuery(sql);
+			String[] arr = new String[5];
+			while(rs.next()) {
+				arr[0] = rs.getString("cnt");
+				arr[1] = type+"_board";
+				arr[2] = rs.getString("title");
+				arr[3] = rs.getString("writer_name");
+				arr[4] = rs.getString("date");
+			}
+			rs.close();
+			sb = new StringBuilder();
+			sql = sb.append("insert into post_list values('").
+					append(arr[0] + "','")
+					.append(arr[1] + "','")
+					.append(arr[2] + "','")
+					.append(arr[3] + "','")	
+					.append(arr[4]+ "');")
+					.toString();
+			System.out.println(sql);
 			st.executeUpdate(sql);
 
 		} catch (SQLException e) {
@@ -294,7 +410,7 @@ public class db_control {
 			disconnect();
 		}
 	}
-	public ArrayList<String[]> load_post(String target, String type)
+	public ArrayList<String[]> load_post(String target, String type, String year)
 	{
 		
 		ArrayList<String[]> post_list = new ArrayList<String[]>();
@@ -302,7 +418,12 @@ public class db_control {
 		try {
 			// 입력한 아이디가 이미 user 테이블에 있는지 검사
 			if(target.equals("*"))
-				sql = "select * from "+type+"_board order by cnt desc";
+			{
+				if(!year.equals("-"))
+					sql = "select * from "+type+"_board where year='"+year+"' order by cnt desc";
+				else
+					sql = "select * from "+type+"_board order by cnt desc";
+			}
 			else
 			{
 				sql = "select * from "+type+"_board where cnt="+target;
@@ -310,7 +431,7 @@ public class db_control {
 			}
 			rs = st.executeQuery(sql);
 			while(rs.next()) {
-				String[] term_list = new String[8];
+				String[] term_list = new String[9];
 				term_list[0] = rs.getString("cnt");
 				term_list[1] = rs.getString("date");
 				term_list[2] = rs.getString("writer_name");

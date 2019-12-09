@@ -76,7 +76,7 @@ body {
   	width: 700px;
   	height: 380px;
   }
-  #login_before, #login_after, #event_list, #new_post{
+  #login_before, #login_after, #birth, #new_post{
   	margin:10px auto;
   	width: 28%;
   	border: solid 2px #e5e5e5;

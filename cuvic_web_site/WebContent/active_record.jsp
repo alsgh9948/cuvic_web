@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <jsp:useBean id="active_record_list" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="db" class="cuvic_web_site.db_control" />
 
 <html>
 <head>
@@ -17,7 +18,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/main.css?version=2">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 
@@ -72,9 +73,30 @@
 </style>
 
 <script>
-var nick_name = "<%= (String)session.getAttribute("nick_name") %>"
+<%
+String nick_name = (String)session.getAttribute("nick_name");
+%>
+var nick_name = "<%=nick_name %>"
 function load_list(){
 	<%
+    ArrayList<String[]> lately_list = db.lately_post();
+for(String[] post : lately_list)
+	{
+		String board = post[1].split("_")[0];
+		if(board.equals("picture"))
+		{
+			%>
+    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+    		<%	
+		}
+		else
+		{
+			%>
+    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+    		<%
+		}
+		
+	}
     	int count = 0;
 		for(String[] list : (ArrayList<String[]>)active_record_list)
 		{
@@ -129,7 +151,9 @@ function load_css(){
 		  				  	+"opacity: 1;}"
 	document.body.appendChild(style);
 }
+
 	$(document).ready(function() {
+		
 		if(nick_name != "null")
 		{
 	        document.getElementById("login_before").style.display="none";
@@ -137,6 +161,9 @@ function load_css(){
 	
 	        document.getElementById("login_after").style.display="inline-block";
 	        document.getElementById("login_after").style.visibility="visible";
+	        
+            document.getElementById("user_info").style.display="inline-block";
+            document.getElementById("user_info").style.visibility="visible";
 		}
 		if(nick_name == "WebMaster")
 			{
@@ -203,14 +230,14 @@ function load_css(){
 
 <body onload="load_list()">
 	<div class="wrapper">
-		<div id=user_info align="right">
-			<table>
+		<div align="right">
+			<table id="user_info" style="visibility:hidden; display:none;">
 				<tr>
-					<td style="padding-right: 20px;"><p>서민호</p></td>
-					<td><button onclick="logout()">로그아웃</button></td>
+					<td style="padding-right: 20px;"><p><%=nick_name %></p></td>
+					<td><button onclick="location.href='controller.jsp?action=logout'">로그아웃</button></td>
 				</tr>
 			</table>
-				<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
+			<a href="main.jsp"><img src="img/logo.png" width="300px;" style="display: block; margin: auto; padding-bottom: 20px;"></a>
 		</div>
 			<div style="position: relative; z-index: 2">
 				<div class='zeta-menu-bar'>
@@ -220,7 +247,7 @@ function load_css(){
 							<ul>
 								<li><a href="introduce.jsp">동아리 소개</a></li>
 								<li><a href="controller.jsp?&action=load_active_record">주요활동ㆍ실적</a></li>
-									<li><a href="controller.jsp?action=load_info&group=1">동아리 회원</a>
+								<li><a href="controller.jsp?action=load_info&group=1">동아리 회원</a>
 									<ul>
 										<li><a href="controller.jsp?action=load_info&group=1">1~5기</a></li>
 										<li><a href="controller.jsp?action=load_info&group=2">6~10기</a></li>
@@ -237,16 +264,20 @@ function load_css(){
 								<li><a href="controller.jsp?&action=load_board&type=qa">Q&A</a></li>
 								<li><a href="controller.jsp?&action=load_board&type=uggestions">건의사항</a></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_seminar_board&year=2019">세미나</a>
+						<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">세미나</a>
 							<ul>
-								<li><a href="controller.jsp?&action=load_seminar_board&year=2019">2019년</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">2019년</a>
+								<ul>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_1학년">1학년</a></li>
+									<li><a href="controller.jsp?&action=load_board&type=seminar&year=2019_2학년">2학년</a></li>
+								</ul></li>
 							</ul></li>
-						<li><a href="controller.jsp?&action=load_data_board">자료실</a>
+						<li><a href="controller.jsp?&action=load_board&type=job">자료실</a>
 							<ul>
-								<li><a href="controller.jsp?action=load_data_board&type=job">취업자료</a></li>
-								<li><a href="controller.jsp?action=load_data_board&type=exam">시험자료</a></li>
-								<li><a href="controller.jsp?action=load_data_board&type=homework">과제공유</a></li>
-								<li><a href="controller.jsp?action=load_data_board&type=etc">기타</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=job">취업자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=exam">시험자료</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=assignment">과제공유</a></li>
+								<li><a href="controller.jsp?&action=load_board&type=etc">기타</a></li>
 							</ul></li>
 					</ul>
 				</div>
@@ -292,14 +323,15 @@ function load_css(){
 					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
 				</form>
 	  		</div>
-	  		<div id="event_list">
-	  			<h1>이달의 행사</h1>
+	  		<div id="birth">
+	  			<p>이달의 생일</p>
 	  		</div>
-	  		<div id="new_post">
-	  			<h1>최신글</h1>
+	  	    <div id="new_post" style="height:400px;">
+	  			<p>최신글</p>
 	  		</div>
 	<div id="footer">
 		<h1>뭐넣지</h1>
+	</div>
 	</div>
 </body>
 </html>
