@@ -2,18 +2,17 @@ CREATE SCHEMA `cuvic` DEFAULT CHARACTER SET utf8;
 
 CREATE TABLE `cuvic`.`user_list` (
   `id` VARCHAR(10) NOT NULL,
-  `password` VARCHAR(10) NULL,
-  `name` VARCHAR(10) NULL,
-  `gender` VARCHAR(2) NULL,
-  `phone_num` VARCHAR(11) NULL,
-  `email` VARCHAR(100) NULL DEFAULT '-',
+  `password` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(10) NOT NULL,
+  `gender` VARCHAR(2) NOT NULL,
+  `phone_num` VARCHAR(11) NOT NULL DEFAULT '-',
+  `email` VARCHAR(100) NOT NULL DEFAULT '-',
   `birth` DATE NULL,
-  `club_num` INT(11) NULL,
-  `nickname` VARCHAR(10) NULL,
-  `work_place` VARCHAR(45) NULL DEFAULT '-',
-  `open_state` VARCHAR(45) NULL,
-  `img_name` VARCHAR(100) NULL DEFAULT '-',
-  `comment` VARCHAR(100) NULL DEFAULT '-',
+  `club_num` INT(11) NOT NULL DEFAULT '0',
+  `nickname` VARCHAR(10) NOT NULL DEFAULT '-',
+  `work_place` VARCHAR(45) NOT NULL DEFAULT '-',
+  `img_name` VARCHAR(100) NOT NULL DEFAULT '-',
+  `comment` VARCHAR(100) NOT NULL DEFAULT '-',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -86,4 +85,95 @@ CREATE TABLE `cuvic`.`uggestions_board` (
   `views` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`cnt`))
 ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`seminar_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `year` VARCHAR(15) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`job_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`exam_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`assignment_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`etc_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`notice_board` (
+  `cnt` INT NOT NULL AUTO_INCREMENT,
+  `writer_name` VARCHAR(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` VARCHAR(100) NOT NULL,
+  `contents` VARCHAR(10000) NOT NULL,
+  `folder_name` VARCHAR(200) NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`cnt`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `cuvic`.`post_list` (
+  
+  `cnt` INT NOT NULL,
+  
+  `board_name` VARCHAR(45) NOT NULL,
+
+  `title` VARCHAR(100) NOT NULL,
+ 
+  `writer_name` VARCHAR(20) NOT NULL,
+
+  `date` VARCHAR(30) NULL,
+
+  PRIMARY KEY (`cnt`, `board_name`))
+
+ENGINE = InnoDB
+
 DEFAULT CHARACTER SET = utf8;
