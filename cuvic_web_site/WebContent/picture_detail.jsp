@@ -140,6 +140,9 @@ String nick_name = (String)session.getAttribute("nick_name");
 		{
             document.getElementById("modify").style.display="inline-block";
             document.getElementById("modify").style.visibility="visible";
+            
+            document.getElementById("delete").style.display="inline-block";
+            document.getElementById("delete").style.visibility="visible";
 		}	
 	}
 </script>
@@ -202,7 +205,8 @@ String nick_name = (String)session.getAttribute("nick_name");
 			</div>
 			<div id="contents1">
 				<input type="button" style="float:right;" value="게시글등록" onClick="location.href='picture_upload.jsp'"><br><br>
-				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글수정" id="modify" onClick="location.href='picture_upload.jsp?writer=<%=picturelist.get(0)[5]%>'">				
+				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글수정" id="modify" onClick="location.href='picture_upload.jsp?cnt=<%=picturelist.get(0)[0]%>'">				
+				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글삭제" id="delete" onClick="location.href='controller.jsp?action=picture_delete&cnt=<%=picturelist.get(0)[0]%>'">				
 				<br>
 				<br>
 			</div>

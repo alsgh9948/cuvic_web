@@ -186,7 +186,7 @@ for(String[] post : lately_list)
 			$('#flex_group_<%=cnt/3%>').append("<div class='post_frame'>"
 											  +"<div class='frame' style='width:210px;text-align:center;'>"
 											  +"<span class='helper'></span>"
-											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><img src='upload/<%=list[6]%>' style='max-height:150px;'></a>"
+											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><img src='picture_board/<%=list[6]%>' style='max-height:150px;'></a>"
 											  +"<span class='helper'></span></div>"
 											  +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=list[0]%>><p><%=list[3]%></p></a><p>조회수 : <%=list[7]%> | 작성일 :<%=list[1].split(" ")[0]%></p><p><%=list[2]%></p></div>");
 			<%

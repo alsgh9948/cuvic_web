@@ -31,13 +31,15 @@ response.setContentType("text/html;charset=UTF-8");
 	String ext = name.substring(name.lastIndexOf(".")+1);
 	System.out.println("22222 : "+ext);
 	String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
+    String board_type = (String)session.getAttribute("board_type");
     String type = (String)session.getAttribute("type");
+
 	// 파일 기본경로
 	String defaultPath="";
-	if(type=="post")
-		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\"+type+"\\"+folder_name+"\\img\\";
+	if(board_type=="post")
+		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\post_board\\"+type+"\\"+folder_name+"\\img\\";
 	else
-		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\"+type+"\\"+folder_name+"\\";
+		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\picture_board\\"+folder_name+"\\";
 	System.out.println("33333 : "+defaultPath);
 	// 파일 기본경로 _ 상세경로
 	String path = defaultPath + File.separator;
@@ -78,10 +80,10 @@ response.setContentType("text/html;charset=UTF-8");
 // 		}
 // 	}
 
-	if(type=="post")
-		sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/"+type+"/"+folder_name+"/img/"+name;
+	if(board_type=="post")
+		sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/post_board/"+type+"/"+folder_name+"/img/"+name;
 	else
-		sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/"+type+"/"+folder_name+"/"+name;
+		sFileInfo += "&bNewLine=true&sFileName="+ name+"&sFileURL="+"/cuvic_web_site/picture_board/"+folder_name+"/"+name;
 	out.println(sFileInfo);	
 	// ./로컬경로에 파일 저장하기 ============================================
 %>

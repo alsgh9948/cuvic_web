@@ -126,7 +126,8 @@ String nick_name = (String)session.getAttribute("nick_name");
 	{
     	<%
 		ArrayList<String[]> postlist = (ArrayList<String[]>)post_list;
-		String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+ postlist.get(0)[5];
+		String type = request.getParameter("type");
+		String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+type+"/"+ postlist.get(0)[5];
 		File folder = new File(path);
 		File[] file_list;
 		String addtag="";
@@ -136,7 +137,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 		for (int i = 0; i < file_list.length; i++)
 		{
 			if(file_list[i].isDirectory()) continue;
-			addtag+="<a href=attachement_download.jsp?folder_name="+postlist.get(0)[5]+"&file_name="+file_list[i].getName()+">"+file_list[i].getName()+"</a><br>"; 
+			addtag+="<a href=attachment_download.jsp?folder_name="+type+"/"+postlist.get(0)[5]+"&file_name="+file_list[i].getName()+">"+file_list[i].getName()+"</a><br>"; 
 		}	
 		}
 		int n = 0,cnt=0, pcnt = 0;

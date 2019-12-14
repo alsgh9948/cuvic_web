@@ -22,16 +22,15 @@ response.setContentType("text/html;charset=UTF-8");
    String encType = "UTF-8";
    String nick_name = (String)session.getAttribute("nick_name");
    String folder_name = (String)session.getAttribute("folder_name");
-   String board_type = (String)session.getAttribute("type");
+   String board_type = (String)session.getAttribute("board_type");
+   String type = (String)session.getAttribute("type");
    String contents_list[] = new String[2];
    folder_name = nick_name+"_"+folder_name;   
-   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+board_type+"/"+folder_name;	
-   String type="";
+   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+board_type+"/"+type+"/"+folder_name;	
    try {
 	      MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy());
 	      contents_list[0] = multi.getParameter("title");
 	      contents_list[1] = multi.getParameter("contents");
-	      type = multi.getParameter("type");
 	      String year = multi.getParameter("year");
 		  if(type.equals("seminar"))
 		      db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type, year);

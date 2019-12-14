@@ -100,10 +100,10 @@ response.setContentType("text/html;charset=UTF-8");
 	}
 	else if(action.equals("load_board"))
 	{
-		String type=request.getParameter("type");
+		String type= request.getParameter("type");
 		ArrayList<String[]> list=null;
-		String board_type = (String)session.getAttribute("type");
-		
+		String board_type = (String)session.getAttribute("board_type");
+		System.out.println(type);
 		if((String)session.getAttribute("nick_name")==null)
 		{
 		%>
@@ -134,8 +134,8 @@ response.setContentType("text/html;charset=UTF-8");
 		else
 		{
 			String target = (String)request.getParameter("cnt");
-			String type=request.getParameter("type");
-			String board_type = (String)session.getAttribute("type");
+			String type = request.getParameter("type");
+			String board_type = (String)session.getAttribute("board_type");
 			String year = request.getParameter("year");
 			ArrayList<String[]> list = null;
 			if(type.equals("seminar"))		
@@ -166,17 +166,37 @@ response.setContentType("text/html;charset=UTF-8");
 		%>
 		location.href="controller.jsp?&action=load_picture_board";<%
 	}
+	else if(action.equals("picture_modify"))
+	{
+		String cnt = request.getParameter("target");
+		db.modify_picture(data_get_set,cnt);
+		%>
+		location.href="controller.jsp?&action=load_picture_board";<%
+	}
+	else if(action.equals("picture_delete"))
+	{
+		String cnt = request.getParameter("cnt");
+		System.out.println(cnt);
+		db.delete_picture(data_get_set, cnt);
+		%>
+		location.href="controller.jsp?&action=load_picture_board";<%
+	}
 	else if(action.equals("remove_folder"))
 	{
 		String today = (String)session.getAttribute("folder_name");
-		String type = (String)session.getAttribute("type");
-        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
-       	if(folder.exists())
+		String board_type = request.getParameter("board_type");
+		String type = request.getParameter("type");
+		File folder = null;
+		if(board_type.equals("post"))
+    	    folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
+		else
+	  	    folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+(String)session.getAttribute("nick_name")+"_"+today);
+        if(folder.exists())
        	{        
-       	File[] file_list = folder.listFiles();
-		for (int i = 0; i < file_list.length; i++) {
-			file_list[i].delete(); 
-		}
+	       	File[] file_list = folder.listFiles();
+			for (int i = 0; i < file_list.length; i++) {
+				file_list[i].delete(); 
+			}
 			folder.delete();
 		}	
     }

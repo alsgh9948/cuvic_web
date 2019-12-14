@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*, java.io.*"%>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.SimpleDateFormat,java.io.*"%>
 
@@ -8,6 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<jsp:useBean id="db" class="cuvic_web_site.db_control" />
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -75,7 +76,6 @@ String nick_name = (String)session.getAttribute("nick_name");
 	            document.getElementById("user_info").style.display="inline-block";
 	            document.getElementById("user_info").style.visibility="visible";
 			}
-		}
 		});
 		$(".zeta-menu li").hover(function() {
 			$('ul:first', this).show();
@@ -99,6 +99,26 @@ String nick_name = (String)session.getAttribute("nick_name");
 	}
     function folder_check()
     {
+		<%
+		 ArrayList<String[]> lately_list = db.lately_post();
+		 for(String[] post : lately_list)
+		     	{
+		 			String board = post[1].split("_")[0];
+		 			if(board.equals("picture"))
+		 			{
+		 				%>
+		 	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+		 	    		<%	
+		 			}
+		 			else
+		 			{
+		 				%>
+		 	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+		 	    		<%
+		 			}
+		 			
+		     	}
+		%>
     	var title = document.getElementById("title").value;
     	var contents = document.getElementById("contents").value;
     	if(title != "" || contents != " ")
@@ -116,9 +136,11 @@ String nick_name = (String)session.getAttribute("nick_name");
     	Calendar calendar = Calendar.getInstance();
         java.util.Date date = calendar.getTime();
         String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+(String)session.getAttribute("nick_name")+"_"+today);
+        String type = (String)request.getParameter("type");
+        File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
     	session.setAttribute("folder_name", today);
-    	session.setAttribute("type", "post");
+    	session.setAttribute("board_type", "post");
+    	session.setAttribute("type", type);
         folder.mkdirs();
         %>
         document.getElementById("year").value ="<%=request.getParameter("year")%>";
@@ -131,7 +153,8 @@ String nick_name = (String)session.getAttribute("nick_name");
 	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	<form method="post" action="controller.jsp" target="if" id="remove_form">
 		<input type="hidden" name="action" value="remove_folder">
-		<input type="hidden" name="type" value="post"> 
+		<input type="hidden" name="board_type" value="post"> 
+		<input type="hidden" name ="type" value="<%=%>">
 	</form>
 	<div class="wrapper">
 		<div align="right">
@@ -188,7 +211,6 @@ String nick_name = (String)session.getAttribute("nick_name");
 			</div>
 			<div id="contents1">
 			<form action="attachment.jsp" method="post" enctype="Multipart/form-data" id="attachment">
-				<input type="hidden" name="type" id="type" value="<%=(String)request.getParameter("type")%>">
 				<input type="hidden" name="nick_name" value="<%=(String)session.getAttribute("nick_name")%>">
 				<input type="hidden" name="folder_name" value="<%=today%>">	
 				<input type="hidden" name="year" id="year" value="">	
@@ -222,12 +244,12 @@ String nick_name = (String)session.getAttribute("nick_name");
 					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout" onclick="change_state()">
 				</form>
 	  		</div>
-	  		<div id="event_list">
-	  			<h1>이달의 행사</h1>
+			<div id="birth">
+	  			<p>이달의 생일</p>
 	  		</div>
-	  		<div id="new_post">
-	  			<h1>최신글</h1>
-	  		</div>
+	  	    <div id="new_post" style="height:400px;">
+	  			<p>최신글</p>
+	  		</div>  
 	  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
@@ -283,8 +305,6 @@ function submitContents(elClickedObj) {
 	oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 	var title = document.getElementById("title").value;
 	var contents = document.getElementById("contents").value;
-	var type = document.getElementById("type").value;
-
 	if(title=="")
 	{
 		alert("제목을 입력하세요");

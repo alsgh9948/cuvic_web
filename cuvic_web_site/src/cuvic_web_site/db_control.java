@@ -2,6 +2,8 @@ package cuvic_web_site;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.File;
 
 import cuvic_web_site.data_get_set;
@@ -73,9 +75,9 @@ public class db_control {
 					term_list[5] = rs.getString("folder_name");
 					File folder=null;
 					if(table_name.equals("picture_board"))
-						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+term_list[5]);
 					else
-						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+term_list[5]);
+						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+term_list[5]);
 			        File[] file_list = folder.listFiles();
 			       if(file_list.length == 0)
 			        	term_list[6] = "-";
@@ -322,6 +324,61 @@ public class db_control {
 			disconnect();
 		}
 	}
+	public void modify_picture(data_get_set value, String cnt) {
+		connect();
+		StringBuilder sb = new StringBuilder();
+		sql = sb.append("update picture_board set ")
+				.append("title='" + value.getTitle() + "', ")
+				.append("contents='" + value.getContents() + "' ")
+				.append("where cnt="+cnt+";")
+				.toString();
+		try {
+			st.executeUpdate(sql);
+			rs = st.executeQuery("select folder_name from picture_board where cnt="+cnt);
+			rs.next();
+			String path = rs.getString("folder_name");
+			File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+path);
+			File[] file_list = folder.listFiles();
+			if(file_list.length != 0)
+	        {
+				Map<String, Boolean> file_name = new HashMap<String, Boolean>();
+				
+				String[] contents_token = value.getContents().split("\"");
+		        for(String token : contents_token)
+		        {
+		        	if(token.contains(path))
+		        	{
+		        		String[] name= token.split("/");
+		        		file_name.put(name[name.length-1],true);		        	}
+		        }
+		        for(int i = 0 ; i < file_list.length ; i++)
+		        {
+	        		System.out.println(file_list[i].getName());
+		        	if(!file_name.containsKey(file_list[i].getName()))
+		        	{
+		        		file_list[i].delete();
+		        	}
+		        }
+		        
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
+	public void delete_picture(data_get_set value, String cnt) {
+		connect();
+		try {
+			st.executeUpdate("delete from picture_board where cnt="+cnt);
+			st.executeUpdate("delete from post_list where board_name='picture_board' and cnt="+cnt);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
 	public ArrayList<String[]> load_picture(String target)
 	{
 		
@@ -345,7 +402,7 @@ public class db_control {
 				term_list[3] = rs.getString("title");
 				term_list[4] = rs.getString("contents");
 				term_list[5] = rs.getString("folder_name");
-				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+term_list[5]);
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+term_list[5]);
 		        File[] file_list = folder.listFiles();
 		        if(file_list.length == 0)
 		        	term_list[6] = "-";
@@ -438,7 +495,7 @@ public class db_control {
 				term_list[3] = rs.getString("title");
 				term_list[4] = rs.getString("contents");
 				term_list[5] = rs.getString("folder_name");
-				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+term_list[5]);
+				File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+term_list[5]);
 		        File[] file_list = folder.listFiles();
 		       if(file_list.length == 0)
 		        	term_list[6] = "-";

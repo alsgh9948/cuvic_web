@@ -8,7 +8,7 @@
     request.setCharacterEncoding("UTF-8");
     // 파일 업로드된 경로
     String folder_name = request.getParameter("folder_name");
-    String board_type = (String)session.getAttribute("type");
+    String board_type = (String)session.getAttribute("board_type");
 
     String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+board_type+"/"+folder_name;	
     // 서버에 실제 저장된 파일명

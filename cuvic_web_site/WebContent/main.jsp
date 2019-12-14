@@ -169,7 +169,7 @@ String nick_name = (String)session.getAttribute("nick_name");
     	    	for( String[] post : list)    			
     	    	{
     	    		%>$('#<%=table_list[i]%>').append("<div style='border:solid #e5e5e5 2px; margin-left:10px; padding:5px; display:inline-block;'>"
-    	    										 +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><img src='upload/<%=post[6]%>' style='max-width:170px; max-height:130px;'></a></div>");<%
+    	    										 +"<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><img src='picture_board/<%=post[6]%>' style='max-width:170px; max-height:130px;'></a></div>");<%
     	    		cnt++;
     	    		if(cnt == 3)
     	    		{

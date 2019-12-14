@@ -1,19 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar"%>
-<%@ page import="java.text.SimpleDateFormat,java.io.*"%>
-<%   
-response.setHeader("Cache-Control","no-store");   
-response.setHeader("Pragma","no-cache");   
-response.setDateHeader("Expires",0);   
-if (request.getProtocol().equals("HTTP/1.1")) 
-        response.setHeader("Cache-Control", "no-cache"); 
-%> 
+<%@ page import="java.text.SimpleDateFormat,java.io.*, java.util.*, java.io.*"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<jsp:useBean id="db" class="cuvic_web_site.db_control" />
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -110,7 +105,8 @@ String nick_name = (String)session.getAttribute("nick_name");
 	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	<form method="post" action="controller.jsp" target="if" id="remove_form">
 		<input type="hidden" name="action" value="remove_folder"> 
-		<input type="hidden" name="type" value="upload"> 
+		<input type="hidden" name="board_type" value="picture">
+		<input type="hidden" name ="type" value="">
 	</form>
 	<div class="wrapper">
 		<div align="right">
@@ -167,10 +163,11 @@ String nick_name = (String)session.getAttribute("nick_name");
 			</div>
 			<div id="contents1">
 			<form action="controller.jsp" method="post" id="sb">
-				<input type="hidden" name="action" value="picture_upload">
+				<input type="hidden" name="action" id="action" value="picture_upload">
+				<input type="hidden" name="target" id="target" value="">
 				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
-				<input type="button" style="float:right; margin:5px 3px 0 0;" value="업로드" onclick="submitContents()">
+				<input type="button" style="float:right; margin:5px 3px 0 0;" id="btn"value="업로드" onclick="submitContents()">
 			</form>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">
@@ -193,12 +190,12 @@ String nick_name = (String)session.getAttribute("nick_name");
 					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout" onclick="change_state()">
 				</form>
 	  		</div>
-	  		<div id="event_list">
-	  			<h1>이달의 행사</h1>
+			<div id="birth">
+	  			<p>이달의 생일</p>
 	  		</div>
-	  		<div id="new_post">
-	  			<h1>최신글</h1>
-	  		</div>
+	  	    <div id="new_post" style="height:400px;">
+	  			<p>최신글</p>
+	  		</div>  
 	  		
 	<div id="footer">
 		<h1>뭐넣지</h1>
@@ -243,6 +240,27 @@ function showHTML() {
 var flag = false;
 function folder_check()
 {
+	<%
+	 String cnt = request.getParameter("cnt");
+	 ArrayList<String[]> lately_list = db.lately_post();
+	 for(String[] post : lately_list)
+	     	{
+	 			String board = post[1].split("_")[0];
+	 			if(board.equals("picture"))
+	 			{
+	 				%>
+	 	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+	 	    		<%	
+	 			}
+	 			else
+	 			{
+	 				%>
+	 	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+	 	    		<%
+	 			}
+	 			
+	     	}
+	%>
 	if("<%=nick_name%>" == "null")
 	{
     alert("로그인후에 이용해주세요");
@@ -252,22 +270,44 @@ function folder_check()
 	var contents = document.getElementById("contents").value;
 	if(title != "" || contents != " ")
 	{
-		flag = true;
-		alert("뒤로가기로 넘어와서 새로고침 해야함");
-		location.reload();
+		if("<%=cnt%>" != "null")
+		{
+			alert("정상적인 접근이 아닙니다.");
+			history.go(-1);
+		}
+		else
+		{
+			alert("뒤로가기로 넘어와서 새로고침 해야함");
+			flag = true;
+			location.reload();
+		}
 	}
 	<%
-	Calendar calendar = Calendar.getInstance();
-    java.util.Date date = calendar.getTime();
-    String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
-    File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
-	session.setAttribute("folder_name", today);
-	session.setAttribute("type", "upload");
-    folder.mkdirs();
+	if(cnt == null)
+	{
+		Calendar calendar = Calendar.getInstance();
+	    java.util.Date date = calendar.getTime();
+	    String today = (new SimpleDateFormat("yyyy년_MM월_dd일_HH시_mm분_ss초").format(date));
+	    File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+(String)session.getAttribute("nick_name")+"_"+today);
+		session.setAttribute("folder_name", today);
+		session.setAttribute("board_type", "upload");
+	    folder.mkdirs();
+	}
+	else
+	{
+		ArrayList<String[]> detail = db.load_picture(cnt);
+		%>
+	    document.getElementById("btn").value = "수정";
+	    document.getElementById("target").value = "<%=cnt%>";
+	    document.getElementById("action").value = "picture_modify";
+	    document.getElementById("title").value = '<%=detail.get(0)[3]%>';
+		document.getElementById("contents").value = '<%=detail.get(0)[4].replaceAll("(\r\n|\r|\n|\n\r)", "")%>';
+		<%
+	}
     %>
 }
 function remove_dir(){
-	if(flag == false)
+	if(flag == false && "<%=cnt%>" == "null")
 	{	
 		document.getElementById("remove_form").submit();
 	}
