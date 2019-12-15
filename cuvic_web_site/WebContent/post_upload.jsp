@@ -97,6 +97,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 		document.getElementById("user_id").value = nick_name;
 		document.getElementById("img").submit;
 	}
+    var attachment_cnt = 0;
     function folder_check()
     {
 		<%
@@ -127,7 +128,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 		}
 		var title = document.getElementById("title").value;
 		var contents = document.getElementById("contents").value;
-		if(title != "" || contents != " ")
+		if(title != " " || contents != " ")
 		{
 			if("<%=cnt%>" != "null")
 			{
@@ -141,12 +142,13 @@ String nick_name = (String)session.getAttribute("nick_name");
 				location.reload();
 			}
 		}
+		document.getElementById("title").value = "";
+		contents = document.getElementById("contents").value="";
     	<%
+    	String folder_name = "";
         String type = (String)request.getParameter("type");
-    	System.out.println(cnt);
-    	if(cnt == null)
+		if(cnt == null)
     	{
-    		System.out.println("!");
     		session.setAttribute("post_state", "-");
 	    	Calendar calendar = Calendar.getInstance();
 	        java.util.Date date = calendar.getTime();
@@ -159,18 +161,43 @@ String nick_name = (String)session.getAttribute("nick_name");
     	}
     	else
     	{
-    		System.out.println("2");
     		ArrayList<String[]> detail = db.load_post(cnt,type,"-");
+    		folder_name = detail.get(0)[5];
     		session.setAttribute("post_state", "수정");
     		%>
     	    document.getElementById("btn").value = "수정";
     	    document.getElementById("target").value = "<%=cnt%>";
     	    document.getElementById("title").value = '<%=detail.get(0)[3]%>';
     		document.getElementById("contents").value = '<%=detail.get(0)[4].replaceAll("(\r\n|\r|\n|\n\r)", "")%>';
+            document.getElementById("file_list").style.display="block";
+            document.getElementById("file_list").style.visibility="visible";
     		<%
+	        File[] file_list = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+detail.get(0)[5]).listFiles();
+    		for(int i = 0 ; i < file_list.length ; i++)
+    		{
+    			%>
+    			attachment_cnt+=1;
+    			$("#file_list").append("<div id='atta"+attachment_cnt+"'><%=file_list[i].getName()%>&nbsp;<button onclick='remove_attachment(\"atta"+attachment_cnt+"\",\"<%=file_list[i].getName()%>\")'>삭제</button></div>");
+    			<%
+    		}
     	}
         %>
         document.getElementById("year").value ="<%=request.getParameter("year")%>";
+    }
+    function remove_attachment(tag,file_name)
+    {
+    	if("<%=cnt%>" != "null")
+    	{
+    		document.getElementById("action").value = "remove_file";
+    		document.getElementById("file_name").value = "<%=folder_name%>/"+file_name;
+    		document.getElementById("remove_form").submit();
+    	}
+    	$("#"+tag).remove();
+    }
+    function add_attachment()
+    {
+    	attachment_cnt+=1;
+    	$('#attachment').append("<div id=atta"+attachment_cnt+"><input type='file' name='fileName'><button onclick='remove_attachment(\"atta"+attachment_cnt+"\")'>삭제</button></div>");
     }
 </script>
 <title>CUVIC</title>
@@ -179,9 +206,10 @@ String nick_name = (String)session.getAttribute("nick_name");
 <body onbeforeunload ="remove_dir()" onload="folder_check()">
 	<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
 	<form method="post" action="controller.jsp" target="if" id="remove_form">
-		<input type="hidden" name="action" value="remove_folder">
+		<input type="hidden" name="action" id="action" value="">
 		<input type="hidden" name="board_type" value="post"> 
 		<input type="hidden" name ="type" value="<%=type%>">
+		<input type="hidden" name ="file_name" id="file_name" value="">
 	</form>
 	<div class="wrapper">
 		<div align="right">
@@ -242,15 +270,21 @@ String nick_name = (String)session.getAttribute("nick_name");
 				<input type="hidden" name="year" id="year" value="">	
 				<input type="hidden" name="target" id="target" value="">
 
-				<input type="text" name="title" id="title" style="width:683px;"  placeholder="제목">
+				<input type="text" name="title" id="title" style="width:683px;" placeholder="제목" value=" ">
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>	
 				<input type="button" style="float:right; margin:5px 3px 0 0;" id="btn" value="업로드" onclick="submitContents()">
 				<br>
+
 				<input type="button" style="float:left; margin:5px 3px 0 0;" value="첨부파일 추가" onclick="add_attachment()">
 				<br>
 				<br>		
 				</form>
+				<br>
+	  			<div id="file_list" style="display:none;visibility:hidden">
+				<p>현재파일목록</p>
+				</div>
 	  		</div>
+	  		
 			<div id="login_before" style="padding: 5px;">
 				<h1>Login</h1>
 				<form method="post" action="controller.jsp">
@@ -318,19 +352,10 @@ function showHTML() {
 }
 var flag = false;
 
-function remove_attachment(tag)
-{
-	$("#"+tag).remove();
-}
-var attachment_cnt = 0;
-function add_attachment()
-{
-	attachment_cnt+=1;
-	$('#attachment').append("<div id=atta"+attachment_cnt+"><input type='file' name='fileName'><button onclick='remove_attachment(\"atta"+attachment_cnt+"\")'>삭제</button></div>");
-}
 function remove_dir(){
 	if(flag == false && "<%=cnt%>" == "null")
 	{	
+		document.getElementById("action").value="remove_folder";
 		document.getElementById("remove_form").submit();
 	}
 }

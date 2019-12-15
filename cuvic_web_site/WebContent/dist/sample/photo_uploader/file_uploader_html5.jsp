@@ -25,11 +25,8 @@ response.setContentType("text/html;charset=UTF-8");
 	String name = request.getHeader("file-name");
 	name = URLDecoder.decode(name, "utf-8");
 
-	System.out.println("11111 : "+name);
-
 	// 확장자
 	String ext = name.substring(name.lastIndexOf(".")+1);
-	System.out.println("22222 : "+ext);
 	String folder_name = (String)session.getAttribute("nick_name")+"_"+(String)session.getAttribute("folder_name");
     String board_type = (String)session.getAttribute("board_type");
     String type = (String)session.getAttribute("type");
@@ -40,11 +37,8 @@ response.setContentType("text/html;charset=UTF-8");
 		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\post_board\\"+type+"\\"+folder_name+"\\img\\";
 	else
 		defaultPath = "C:\\Users\\seo\\Desktop\\cuvic_web\\cuvic_web_site\\WebContent\\picture_board\\"+folder_name+"\\";
-	System.out.println("33333 : "+defaultPath);
 	// 파일 기본경로 _ 상세경로
 	String path = defaultPath + File.separator;
-	System.out.println("44444 : "+path+name);
-
 
 	File file = new File(path);
 	if(!file.exists()) {
@@ -68,10 +62,6 @@ response.setContentType("text/html;charset=UTF-8");
 
 	os.flush();
 	os.close();
-
-	System.out.println("path : "+path);
-	System.out.println("realname : "+realname);
-
 	// 파일 삭제
 // 	File f1 = new File(path, realname);
 // 	if (!f1.isDirectory()) {

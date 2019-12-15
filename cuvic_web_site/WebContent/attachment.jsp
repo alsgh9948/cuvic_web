@@ -36,7 +36,6 @@ response.setContentType("text/html;charset=UTF-8");
 	      if(post_state.equals("수정"))
 	      {
 	    	  String cnt = multi.getParameter("target");
-	    	  System.out.println(cnt);
 		        
 	    	  db.modify_post(contents_list, cnt, type);
 			  if(type.equals("seminar"))

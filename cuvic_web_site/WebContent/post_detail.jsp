@@ -127,7 +127,7 @@ String nick_name = (String)session.getAttribute("nick_name");
     	<%
 		ArrayList<String[]> postlist = (ArrayList<String[]>)post_list;
 		String type = request.getParameter("type");
-		String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post/"+type+"/"+ postlist.get(0)[5];
+		String path = "C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+ postlist.get(0)[5];
 		File folder = new File(path);
 		File[] file_list;
 		String addtag="";

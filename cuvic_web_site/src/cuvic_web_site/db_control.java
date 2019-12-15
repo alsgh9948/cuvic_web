@@ -75,13 +75,15 @@ public class db_control {
 					term_list[5] = rs.getString("folder_name");
 					File folder=null;
 					if(table_name.equals("picture_board"))
+					{
 						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+term_list[5]);
+						File[] file_list = folder.listFiles();
+					    if(file_list.length == 0)
+					    	term_list[6] = "-";
+					    else term_list[6] = term_list[5]+"/"+file_list[0].getName();
+					}
 					else
-						folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+term_list[5]);
-			        File[] file_list = folder.listFiles();
-			       if(file_list.length == 0)
-			        	term_list[6] = "-";
-			        else term_list[6] = term_list[5]+"/"+file_list[0].getName();
+						term_list[6] = "-";
 			        term_list[7] = rs.getString("views");
 			        list.add(term_list);
 				}
@@ -353,7 +355,6 @@ public class db_control {
 		        }
 		        for(int i = 0 ; i < file_list.length ; i++)
 		        {
-	        		System.out.println(file_list[i].getName());
 		        	if(!file_name.containsKey(file_list[i].getName()))
 		        	{
 		        		file_list[i].delete();
@@ -458,7 +459,6 @@ public class db_control {
 					.append(arr[3] + "','")	
 					.append(arr[4]+ "');")
 					.toString();
-			System.out.println(sql);
 			st.executeUpdate(sql);
 
 		} catch (SQLException e) {
@@ -521,7 +521,34 @@ public class db_control {
 				.append("where cnt="+cnt+";")
 				.toString();
 		try {
-			st.executeUpdate(sql);		        
+			st.executeUpdate(sql);
+			st.executeUpdate(sql);
+			rs = st.executeQuery("select folder_name from "+type+"_board where cnt="+cnt);
+			rs.next();
+			String path = rs.getString("folder_name");
+			File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+path+"/img");
+			File[] file_list = folder.listFiles();
+			if(folder.exists() && file_list.length != 0)
+	        {
+				Map<String, Boolean> file_name = new HashMap<String, Boolean>();
+				
+				String[] contents_token = contents_list[1].split("\"");
+		        for(String token : contents_token)
+		        {
+		        	if(token.contains(path))
+		        	{
+		        		String[] name= token.split("/");
+		        		file_name.put(name[name.length-1],true);		        	}
+		        }
+		        for(int i = 0 ; i < file_list.length ; i++)
+		        {
+		        	if(!file_name.containsKey(file_list[i].getName()))
+		        	{
+		        		file_list[i].delete();
+		        	}
+		        }
+		        
+	        }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

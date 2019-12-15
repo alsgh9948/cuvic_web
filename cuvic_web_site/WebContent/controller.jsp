@@ -102,8 +102,6 @@ response.setContentType("text/html;charset=UTF-8");
 	{
 		String type= request.getParameter("type");
 		ArrayList<String[]> list=null;
-		String board_type = (String)session.getAttribute("board_type");
-		System.out.println(type);
 		if((String)session.getAttribute("nick_name")==null)
 		{
 		%>
@@ -152,10 +150,9 @@ response.setContentType("text/html;charset=UTF-8");
 	{
 		String cnt = request.getParameter("cnt");
 		String type = request.getParameter("type");
-		System.out.println(type);
 		db.delete_post(data_get_set, cnt, type);
 		%>
-		location.href="controller.jsp?&action=load_picture_board";<%
+		location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
 	}
 	else if(action.equals("picture_delete"))
 	{
@@ -192,7 +189,6 @@ response.setContentType("text/html;charset=UTF-8");
 	else if(action.equals("picture_delete"))
 	{
 		String cnt = request.getParameter("cnt");
-		System.out.println(cnt);
 		db.delete_picture(data_get_set, cnt);
 		%>
 		location.href="controller.jsp?&action=load_picture_board";<%
@@ -215,6 +211,13 @@ response.setContentType("text/html;charset=UTF-8");
 			}
 			folder.delete();
 		}	
+    }
+	else if(action.equals("remove_file"))
+	{
+		String type = request.getParameter("type");
+		String file_name = request.getParameter("file_name");
+		File file = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+file_name);
+		file.delete();	
     }
 	else if(action.equals("load_picture_detail"))
 	{

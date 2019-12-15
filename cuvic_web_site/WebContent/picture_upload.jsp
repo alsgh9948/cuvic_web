@@ -165,7 +165,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 			<form action="controller.jsp" method="post" id="sb">
 				<input type="hidden" name="action" id="action" value="picture_upload">
 				<input type="hidden" name="target" id="target" value="">
-				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
+				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"> </textarea>
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
 				<input type="button" style="float:right; margin:5px 3px 0 0;" id="btn" value="업로드" onclick="submitContents()">
 			</form>
@@ -268,7 +268,7 @@ function folder_check()
 	}
 	var title = document.getElementById("title").value;
 	var contents = document.getElementById("contents").value;
-	if(title != "" || contents != " ")
+	if(title != " " || contents != " ")
 	{
 		if("<%=cnt%>" != "null")
 		{
@@ -282,6 +282,8 @@ function folder_check()
 			location.reload();
 		}
 	}
+	document.getElementById("title").value = "";
+	contents = document.getElementById("contents").value="";
 	<%
 	if(cnt == null)
 	{

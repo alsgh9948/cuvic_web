@@ -32,13 +32,11 @@
    String savefile = "image";
    ServletContext scontext = getServletContext();
    realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/user_img";	
-   System.out.println(realFolder);
    try {
       
       MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType);
       String id = (String)multi.getParameter("user_id");
       String gender = (String)multi.getParameter("user_gender");
-	  System.out.println(gender);
       Enumeration<?> files = multi.getFileNames();
       String file1 = (String) files.nextElement();
       filename1 = multi.getFilesystemName(file1);
@@ -55,7 +53,6 @@
 		  if(gender.equals("m"))
 	   	  {
 			stmt.executeUpdate("update user_list set img_name='man.png' where id='"+id+"'");
-			System.out.println("update user_list set img_name='man.png' where id='"+id+"'");
 	      }
 		  else if(gender.equals("w"))
 	      {
