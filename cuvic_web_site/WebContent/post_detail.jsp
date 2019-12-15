@@ -221,7 +221,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 			<div id="contents1">
 				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=(String)request.getParameter("type")%>'">
 				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글수정" id="modify" onClick="location.href='post_upload.jsp?type=<%=type%>&cnt=<%=postlist.get(0)[0]%>'">				
-				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글삭제" id="delete" onClick="location.href='controller.jsp?action=post_delete&type=<%=type%>&cnt=<%=postlist.get(0)[0]%>'">		
+				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글삭제" id="delete" onClick="location.href='controller.jsp?action=post_delete&type=<%=type%>&cnt=<%=postlist.get(0)[0]%>&folder=<%=postlist.get(0)[5]%>'">		
 				<br>
 				<br>
 			</div>

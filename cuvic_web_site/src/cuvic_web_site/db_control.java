@@ -336,6 +336,7 @@ public class db_control {
 				.toString();
 		try {
 			st.executeUpdate(sql);
+			st.executeUpdate("update post_list set title='"+value.getTitle()+"' where board_name='picture_board' and cnt="+cnt);
 			rs = st.executeQuery("select folder_name from picture_board where cnt="+cnt);
 			rs.next();
 			String path = rs.getString("folder_name");
@@ -522,7 +523,7 @@ public class db_control {
 				.toString();
 		try {
 			st.executeUpdate(sql);
-			st.executeUpdate(sql);
+			st.executeUpdate("update post_list set title='"+contents_list[0]+"' where board_name='"+type+"_board' and cnt="+cnt);
 			rs = st.executeQuery("select folder_name from "+type+"_board where cnt="+cnt);
 			rs.next();
 			String path = rs.getString("folder_name");

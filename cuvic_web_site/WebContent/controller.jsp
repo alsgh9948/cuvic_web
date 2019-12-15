@@ -150,6 +150,16 @@ response.setContentType("text/html;charset=UTF-8");
 	{
 		String cnt = request.getParameter("cnt");
 		String type = request.getParameter("type");
+		String folder_name = request.getParameter("folder");
+		File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+folder_name);
+		if(folder.exists())
+       	{        
+	       	File[] file_list = folder.listFiles();
+			for (int i = 0; i < file_list.length; i++) {
+				file_list[i].delete(); 
+			}
+			folder.delete();
+		}	
 		db.delete_post(data_get_set, cnt, type);
 		%>
 		location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
@@ -157,6 +167,16 @@ response.setContentType("text/html;charset=UTF-8");
 	else if(action.equals("picture_delete"))
 	{
 		String cnt = request.getParameter("cnt");
+		String folder_name = (String)session.getAttribute("folder");
+		File folder = new File("C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/picture_board/"+folder_name);
+		if(folder.exists())
+       	{        
+	       	File[] file_list = folder.listFiles();
+			for (int i = 0; i < file_list.length; i++) {
+				file_list[i].delete(); 
+			}
+			folder.delete();
+		}	
 		db.delete_picture(data_get_set, cnt);
 		%>
 		location.href="controller.jsp?&action=load_picture_board";<%
