@@ -150,6 +150,14 @@ String nick_name = (String)session.getAttribute("nick_name");
 			<%
 		}
 		%>
+		if(<%=postlist.get(0)[2].equals(nick_name)%>)
+		{
+            document.getElementById("modify").style.display="inline-block";
+            document.getElementById("modify").style.visibility="visible";
+            
+            document.getElementById("delete").style.display="inline-block";
+            document.getElementById("delete").style.visibility="visible";
+		}	
 	}
 </script>
 <title>CUVIC</title>
@@ -212,6 +220,8 @@ String nick_name = (String)session.getAttribute("nick_name");
 
 			<div id="contents1">
 				<input type="button" style="float:right;" value="게시글작성" onClick="location.href='post_upload.jsp?type=<%=(String)request.getParameter("type")%>'">
+				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글수정" id="modify" onClick="location.href='post_upload.jsp?type=<%=type%>&cnt=<%=postlist.get(0)[0]%>'">				
+				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글삭제" id="delete" onClick="location.href='controller.jsp?action=post_delete&type=<%=type%>&cnt=<%=postlist.get(0)[0]%>'">		
 				<br>
 				<br>
 			</div>

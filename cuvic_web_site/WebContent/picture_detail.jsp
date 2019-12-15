@@ -204,7 +204,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 				</div>
 			</div>
 			<div id="contents1">
-				<input type="button" style="float:right;" value="게시글등록" onClick="location.href='picture_upload.jsp'"><br><br>
+				<input type="button" style="float:right;" value="게시글등록" onClick="location.href='picture_upload.jsp'">
 				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글수정" id="modify" onClick="location.href='picture_upload.jsp?cnt=<%=picturelist.get(0)[0]%>'">				
 				<input type="button" style="float:right; display:none;visibility:hidden;" value="게시글삭제" id="delete" onClick="location.href='controller.jsp?action=picture_delete&cnt=<%=picturelist.get(0)[0]%>'">				
 				<br>

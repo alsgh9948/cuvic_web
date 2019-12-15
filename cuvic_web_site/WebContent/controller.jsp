@@ -148,6 +148,22 @@ response.setContentType("text/html;charset=UTF-8");
 
 		}
 	}
+	else if(action.equals("post_delete"))
+	{
+		String cnt = request.getParameter("cnt");
+		String type = request.getParameter("type");
+		System.out.println(type);
+		db.delete_post(data_get_set, cnt, type);
+		%>
+		location.href="controller.jsp?&action=load_picture_board";<%
+	}
+	else if(action.equals("picture_delete"))
+	{
+		String cnt = request.getParameter("cnt");
+		db.delete_picture(data_get_set, cnt);
+		%>
+		location.href="controller.jsp?&action=load_picture_board";<%
+	}
 	else if(action.equals("load_seminar_board"))
 	{
 		String year=request.getParameter("year");

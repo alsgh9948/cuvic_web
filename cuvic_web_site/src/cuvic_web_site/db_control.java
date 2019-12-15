@@ -512,4 +512,31 @@ public class db_control {
 		}
 		return null;
 	}
+	public void modify_post(String[] contents_list, String cnt, String type) {
+		connect();
+		StringBuilder sb = new StringBuilder();
+		sql = sb.append("update "+type+"_board set ")
+				.append("title='" + contents_list[0] + "', ")
+				.append("contents='" + contents_list[1] + "' ")
+				.append("where cnt="+cnt+";")
+				.toString();
+		try {
+			st.executeUpdate(sql);		        
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
+	public void delete_post(data_get_set value, String cnt, String type) {
+		connect();
+		try {
+			st.executeUpdate("delete from "+type+"_board where cnt="+cnt);
+			st.executeUpdate("delete from post_list where board_name='"+type+"_board' and cnt="+cnt);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+	}
 }

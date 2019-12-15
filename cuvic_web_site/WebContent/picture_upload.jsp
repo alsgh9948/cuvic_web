@@ -167,7 +167,7 @@ String nick_name = (String)session.getAttribute("nick_name");
 				<input type="hidden" name="target" id="target" value="">
 				<textarea name="title" id="title" rows="1" cols="80" style="width:683px; resize:none;" placeholder="제목"></textarea>
 				<textarea name="contents" id="contents" rows="10" cols="80" style="both:clear; width:681px; height:412px; display:none;"> </textarea>
-				<input type="button" style="float:right; margin:5px 3px 0 0;" id="btn"value="업로드" onclick="submitContents()">
+				<input type="button" style="float:right; margin:5px 3px 0 0;" id="btn" value="업로드" onclick="submitContents()">
 			</form>
 	  		</div>
 			<div id="login_before" style="padding: 5px;">

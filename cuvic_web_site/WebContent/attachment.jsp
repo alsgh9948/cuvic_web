@@ -25,30 +25,50 @@ response.setContentType("text/html;charset=UTF-8");
    String board_type = (String)session.getAttribute("board_type");
    String type = (String)session.getAttribute("type");
    String contents_list[] = new String[2];
+   String post_state = (String)session.getAttribute("post_state");
    folder_name = nick_name+"_"+folder_name;   
-   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/"+board_type+"/"+type+"/"+folder_name;	
+   realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/post_board/"+type+"/"+folder_name;	
    try {
 	      MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy());
 	      contents_list[0] = multi.getParameter("title");
 	      contents_list[1] = multi.getParameter("contents");
 	      String year = multi.getParameter("year");
-		  if(type.equals("seminar"))
-		      db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type, year);
-		  else
-			  db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type,"-");
-	      File[] file_list = new File(realFolder).listFiles();      
-		  for (int i = 0; i < file_list.length; i++) {
-			File file = new File(realFolder +"/"+file_list[i].getName());
-			file.renameTo(new File(realFolder +"/"+file_list[i].getName().replace(" ","_")));
-	  	  }
-		  if(type.equals("seminar"))
-		  {
-			  %>location.href="controller.jsp?&action=load_board&type=<%=type%>&year=<%=year%>";<%
-		  }
-		  else
-		  {
-			  %>location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
-     	  }
+	      if(post_state.equals("수정"))
+	      {
+	    	  String cnt = multi.getParameter("target");
+	    	  System.out.println(cnt);
+		        
+	    	  db.modify_post(contents_list, cnt, type);
+			  if(type.equals("seminar"))
+			  {
+				  %>location.href="controller.jsp?&action=load_board&type=<%=type%>&year=<%=year%>";<%
+			  }
+			  else
+			  {
+				  %>location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
+	     	  }
+	      }
+	      else
+	      {
+		      if(type.equals("seminar"))
+			      db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type, year);
+			  else
+				  db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type,"-");
+	       
+		      File[] file_list = new File(realFolder).listFiles();      
+			  for (int i = 0; i < file_list.length; i++) {
+				File file = new File(realFolder +"/"+file_list[i].getName());
+				file.renameTo(new File(realFolder +"/"+file_list[i].getName().replace(" ","_")));
+		  	  }
+			  if(type.equals("seminar"))
+			  {
+				  %>location.href="controller.jsp?&action=load_board&type=<%=type%>&year=<%=year%>";<%
+			  }
+			  else
+			  {
+				  %>location.href="controller.jsp?&action=load_board&type=<%=type%>";<%
+	     	  }
+	      }
 	  }
    	  catch (Exception e) {
 	      e.printStackTrace();
