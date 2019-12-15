@@ -1,32 +1,51 @@
 file_uploader_html5.jsp
 ªÁ¡¯√∏ upload ∞Ê∑Œ : 
-"/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+folder_name+"/";
-"/cuvic_web_site/upload/"
+	if(board_type=="post")
+		defaultPath = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+folder_name+"/img/";
+	else
+		defaultPath = "/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+folder_name+"/";
 
 fileupload.jsp
 "/usr/local/tomcat8.5/webapps/cuvic_web_site/user_img";
 
-upload_picture.jsp
-File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+(String)session.getAttribute("nick_name")+"_"+today);
-
-
+picture_upload.jsp
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+(String)session.getAttribute("nick_name")+"_"+today);
 
 db_control.java
+load_main_page_post
+folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+term_list[5]);
+
+modify_picture
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+path);
+
 load_picture
-File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/upload/"+term_list[5]);
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+term_list[5]);
 
 load_post
-File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+term_list[5]);
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+term_list[5]);
 
-post_attachement_download.jsp
-String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+folder_name;	
+modify_post
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+path+"/img");
 
-post_attachement.jsp
-realFolder ="/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+folder_name;	
+attachement_download.jsp
+String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+folder_name;	
 
+attachement.jsp
+   realFolder ="/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+folder_name;
+	
 post_detail.jsp
-String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+ postlist.get(0)[5];
+String path = "/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+ postlist.get(0)[5];
 
 post_upload.jsp
-File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post/"+(String)session.getAttribute("nick_name")+"_"+today);
+File folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
+File[] file_list = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+detail.get(0)[5]).listFiles();
+
+controller.jsp
+remove_folder
+    	    folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+(String)session.getAttribute("nick_name")+"_"+today);
+		else
+	  	    folder = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/picture_board/"+(String)session.getAttribute("nick_name")+"_"+today);
+
+remove_file
+File file = new File("/usr/local/tomcat8.5/webapps/cuvic_web_site/post_board/"+type+"/"+file_name);
 
