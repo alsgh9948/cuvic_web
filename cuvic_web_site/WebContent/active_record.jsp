@@ -86,13 +86,13 @@ for(String[] post : lately_list)
 		if(board.equals("picture"))
 		{
 			%>
-    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><div><%=post[2]%></div></a>");
     		<%	
 		}
 		else
 		{
 			%>
-    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><div><%=post[2]%></div></a>");
     		<%
 		}
 		
@@ -101,7 +101,7 @@ for(String[] post : lately_list)
 		for(String[] list : (ArrayList<String[]>)active_record_list)
 		{
 	%>
-	if(nick_name != "WebMaster")
+	if(nick_name != "관리자")
 	 {
 		$('#active').append("<div class='detail' id='select_<%=count%>' style='margin-right:5px;'>&nbsp"
 				+"<%=list[1]%>&nbsp <span id='title'><%=list[0]%></span>"
@@ -165,7 +165,7 @@ function load_css(){
             document.getElementById("user_info").style.display="inline-block";
             document.getElementById("user_info").style.visibility="visible";
 		}
-		if(nick_name == "WebMaster")
+		if(nick_name == "관리자")
 			{
 	        document.getElementById("_hidden").style.display="inline-block";
 	        document.getElementById("_hidden").style.visibility="visible";
@@ -320,7 +320,9 @@ function load_css(){
 				<form method="post" action="controller.jsp">
 					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
 					<input type="hidden" name="action" value="logout">
-					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
+					<br>
+					<input type="submit" value="로그아웃">
+					<input type="button" value="정보수정" onclick="location.href='controller.jsp?action=info_modify'">
 				</form>
 	  		</div>
 	  		<div id="birth">

@@ -62,13 +62,13 @@ for(String[] post : lately_list)
 			if(board.equals("picture"))
 			{
 				%>
-	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
+	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><div><%=post[2]%></div></a>");
 	    		<%	
 			}
 			else
 			{
 				%>
-	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
+	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><div><%=post[2]%></div></a>");
 	    		<%
 			}
 			
@@ -134,7 +134,7 @@ for(String[] post : lately_list)
 					cnt++;
 					%>
 					$('#group_<%=n%>').append("<table style='margin:auto; width:550px; margin-top: 10px;'>"
-	 							         +"<tr><td rowspan='3'align='center' width='30%'><img src='user_img/<%=list[0]%>' style='padding:5px 0 5px 0; max-width: auto; height: 188px;'></td>"
+	 							         +"<tr><td rowspan='3'align='center' width='30%' height='188px'><img src='user_img/<%=list[0]%>' style='padding:5px 0 5px 0; max-width: 178px;'></td>"
   										 +"<td width='20%'>이름 : <%=list[1]%></td>"
  				 						 +"<td width='20%'>기수 : <%=list[2]%>기</td>"
   										 +"<td rowspan='3'><p>한마디</p><p><%=list[5]%></p></td></tr>"

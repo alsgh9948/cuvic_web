@@ -100,4 +100,10 @@ body {
   	height: 100px;
   	clear: 	both;
   }
+  #new_post div
+{
+	overflow:hidden; 
+	text-overflow:ellipsis; 
+	white-space:nowrap;
+	width:270px;
 }

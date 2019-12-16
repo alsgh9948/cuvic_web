@@ -14,7 +14,7 @@
    Connection conn = null;
    Statement stmt = null;
    String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8";
+	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8&openssl=true";
 	try {
       Class.forName(jdbc_driver);
       conn = DriverManager.getConnection(jdbc_url, "admin", "tkakrnl1");
@@ -33,23 +33,13 @@
    ServletContext scontext = getServletContext();
    realFolder ="C:/Users/seo/Desktop/cuvic_web/cuvic_web_site/WebContent/user_img";	
    try {
-      
+      System.out.println("asdf");
       MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType);
       String id = (String)multi.getParameter("user_id");
       String gender = (String)multi.getParameter("user_gender");
-      Enumeration<?> files = multi.getFileNames();
-      String file1 = (String) files.nextElement();
-      filename1 = multi.getFilesystemName(file1);
-      String fullpath = realFolder + filename1; //fullpath = 이미지 경로
-      File file = new File( realFolder +"/"+ filename1 );
-      File fileNew = new File( realFolder +"/"+ id+".jpg" );
-      if( file.exists() ) file.renameTo( fileNew );
-      if(filename1 != null)
-      {
-    	  stmt.executeUpdate("update user_list set img_name='"+id+".jpg' where id='"+id+"'");
-      }
-      else
-      {
+	  if(multi.getParameter("default_img").equals("true"))
+	  {
+	      new File( realFolder +"/"+ id+".jpg" ).delete();
 		  if(gender.equals("m"))
 	   	  {
 			stmt.executeUpdate("update user_list set img_name='man.png' where id='"+id+"'");
@@ -58,6 +48,33 @@
 	      {
 			  stmt.executeUpdate("update user_list set img_name='woman.png' where id='"+id+"'");  
 	      }
+	  }
+      
+	  else
+	  {	  
+	      Enumeration<?> files = multi.getFileNames();
+	      String file1 = (String) files.nextElement();
+	      filename1 = multi.getFilesystemName(file1);
+	      String fullpath = realFolder + filename1; //fullpath = 이미지 경로
+	      new File( realFolder +"/"+ id+".jpg" ).delete();
+  		  File file = new File( realFolder +"/"+ filename1 );
+	      File fileNew = new File( realFolder +"/"+ id+".jpg" );
+	      if( file.exists() ) file.renameTo( fileNew );
+	      if(filename1 != null)
+	      {
+	    	  stmt.executeUpdate("update user_list set img_name='"+id+".jpg' where id='"+id+"'");
+	      }
+	      else
+	      {
+			  if(gender.equals("m"))
+		   	  {
+				stmt.executeUpdate("update user_list set img_name='man.png' where id='"+id+"'");
+		      }
+			  else if(gender.equals("w"))
+		      {
+				  stmt.executeUpdate("update user_list set img_name='woman.png' where id='"+id+"'");  
+		      }
+		  }
 	  }
       pageContext.forward("main.jsp");
    } catch (Exception e) {

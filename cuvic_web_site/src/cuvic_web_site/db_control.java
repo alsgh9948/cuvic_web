@@ -14,7 +14,7 @@ public class db_control {
 	ResultSet rs = null;
 	Statement st = null;
 	String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8";
+	String jdbc_url = "jdbc:mysql://database-1.cojltuuvj7qw.ap-northeast-2.rds.amazonaws.com:3306/cuvic?useUnicode=true&characterEncoding=UTF-8&openssl=true";
 	String sql;
 //	
 	// 데이터베이스 연결
@@ -146,7 +146,6 @@ public class db_control {
 				.append(value.getClub_num() + "','")
 				.append(value.getNick_name() + "','")
 				.append(value.getWork_place() + "','")
-				.append(value.getOpen_state() + "','")
 				.append(img_path + "','")
 				.append(value.getComment() + "');").toString();
 		try {
@@ -160,22 +159,22 @@ public class db_control {
 		return true;
 	}
 
-	public String[] login(String id, String password) {
+	public String login(String id, String password) {
 		connect();
-		String[] nick_name = new String[2];
+		String nick_name = null;
 		try {
 			// 등록된 아이딘지 검사
 			sql = "select password, nickname from user_list where id='" + id + "'";
 			rs = st.executeQuery(sql);
 			if (rs.next()) {
 				if (rs.getString("password").equals(password)) {
-					nick_name[0] = rs.getString("nickname"); // 등록된 회원일 경우 null값을 리턴한다
+					nick_name = rs.getString("nickname"); // 등록된 회원일 경우 null값을 리턴한다
 				}
 				else {
-					nick_name[1] = "비밀번호를 확인하세요";
+					return null;
 				}
 			} else {
-				nick_name[1] = "아이디를 확인하세요";
+				return null;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -232,6 +231,61 @@ public class db_control {
 			disconnect();
 		}
 		return null;
+	}
+	public String[] load_myinfo(String id)
+	{
+		sql = "select * from user_list where id='"+id+"'";
+		String[] user_info = new String[9];
+		connect();
+		try {
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				user_info[0] = rs.getString("name");
+				user_info[1] = rs.getString("gender");
+				user_info[2] = rs.getString("phone_num");
+				user_info[3] = rs.getString("email");
+				user_info[4] = rs.getString("birth");
+				user_info[5] = rs.getString("work_place");
+				user_info[6] = rs.getString("img_name");
+				user_info[7] = rs.getString("comment");
+				user_info[8] = rs.getString("password");
+			}
+			rs.close();
+			return user_info;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return null;
+	}
+	public void info_update(data_get_set value, String[] before, String id) {
+		connect();
+		sql = "update user_list set";
+		if(!value.getName().equals(before[0]))
+			sql+=" name="+value.getName();
+		if(!value.getGender().equals(before[1]))
+			sql+=" gender="+value.getGender();
+		if(!value.getPhone_num().equals(before[2]))
+			sql+=" phone_num="+value.getPhone_num();
+		if(!value.getEmail().equals(before[3]))
+			sql+=" email="+value.getEmail();
+		if(!value.getBirth().equals(before[4]))
+			sql+=" birth="+value.getBirth();
+		if(!value.getWork_place().equals(before[5]))
+			sql+=" work_place="+value.getWork_place();
+		if(!value.getComment().equals(before[7]))
+			sql+=" comment="+value.getComment();
+		if(value.getPassword() != null && !value.getPassword().equals(before[8]))
+			sql+=" password="+value.getPassword();
+		sql +=" id='"+id+"' where id='"+id+"'";
+		try {
+			st.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
 	}
 	public ArrayList<String[]> load_active_record()
 	{

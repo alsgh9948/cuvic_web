@@ -33,6 +33,11 @@ response.setContentType("text/html;charset=UTF-8");
 	      contents_list[0] = multi.getParameter("title");
 	      contents_list[1] = multi.getParameter("contents");
 	      String year = multi.getParameter("year");
+	      File[] file_list = new File(realFolder).listFiles();      
+		  for (int i = 0; i < file_list.length; i++) {
+			File file = new File(realFolder +"/"+file_list[i].getName());
+			file.renameTo(new File(realFolder +"/"+file_list[i].getName().replace(" ","_")));
+	  	  }
 	      if(post_state.equals("수정"))
 	      {
 	    	  String cnt = multi.getParameter("target");
@@ -53,12 +58,6 @@ response.setContentType("text/html;charset=UTF-8");
 			      db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type, year);
 			  else
 				  db.insert_post(contents_list, nick_name, (String)session.getAttribute("folder_name"), type,"-");
-	       
-		      File[] file_list = new File(realFolder).listFiles();      
-			  for (int i = 0; i < file_list.length; i++) {
-				File file = new File(realFolder +"/"+file_list[i].getName());
-				file.renameTo(new File(realFolder +"/"+file_list[i].getName().replace(" ","_")));
-		  	  }
 			  if(type.equals("seminar"))
 			  {
 				  %>location.href="controller.jsp?&action=load_board&type=<%=type%>&year=<%=year%>";<%

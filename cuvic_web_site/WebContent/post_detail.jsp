@@ -72,18 +72,18 @@ String nick_name = (String)session.getAttribute("nick_name");
 			 for(String[] post : lately_list)
 			     	{
 			 			String board = post[1].split("_")[0];
-			 			if(board.equals("picture"))
-			 			{
-			 				%>
-			 	    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><%=post[2]%></a><br>");
-			 	    		<%	
-			 			}
-			 			else
-			 			{
-			 				%>
-			 	    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><%=post[2]%></a><br>");
-			 	    		<%
-			 			}
+						if(board.equals("picture"))
+						{
+							%>
+				    		$('#new_post').append("<a href=controller.jsp?action=load_picture_detail&cnt=<%=post[0]%>><div><%=post[2]%></div></a>");
+				    		<%	
+						}
+						else
+						{
+							%>
+				    		$('#new_post').append("<a href=controller.jsp?action=load_post_detail&cnt=<%=post[0]%>&type=<%=board%>><div><%=post[2]%></div></a>");
+				    		<%
+						}
 			 			
 			     	}
 			%>
@@ -242,7 +242,9 @@ String nick_name = (String)session.getAttribute("nick_name");
 				<form method="post" action="controller.jsp">
 					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
 					<input type="hidden" name="action" value="logout">
-					<input type="submit" style="margin-left:10px; width:90px; height:69px;" value="Logout">
+					<br>
+					<input type="submit" value="로그아웃">
+					<input type="button" value="정보수정" onclick="location.href='controller.jsp?action=info_modify'">
 				</form>
 	  		</div>
 			<div id="birth">

@@ -22,23 +22,24 @@ response.setContentType("text/html;charset=UTF-8");
 	{
 		String id = request.getParameter("id");
 		String password = request.getParameter("password");
-		String[] nick_name = db.login(id, password);
-  		if(nick_name[1] != null)
+		String nick_name = db.login(id, password);
+  		if(nick_name == null)
   		{
 	   		%>
-			alert("<%=nick_name[1] %>");
+			alert("등록된 계정이 아니거나 아이디 혹은 비밀번호를 확인하세요.");
 			<%
   		}
   		else
   		{
-  			session.setAttribute("nick_name", nick_name[0]);
-   		}			
-  		pageContext.forward("main.jsp");
+  			session.setAttribute("nick_name", nick_name);
+  			session.setAttribute("id", id);
+  	  	}
+  		%>location.href="main.jsp";<%
 	}
 	else if(action.equals("logout"))
 	{
 		session.invalidate();
-		pageContext.forward("main.jsp");
+		%>location.href="main.jsp";<%
 	}
 	else if(action.equals("IdCheck"))
 	{
@@ -56,6 +57,26 @@ response.setContentType("text/html;charset=UTF-8");
 	        	alert("이미 사용중인 아이디입니다.");
 	 	  <%
 	  }
+	}
+	else if(action.equals("info_modify"))
+	{
+		if((String)session.getAttribute("nick_name")==null)
+		{
+		%>
+			alert("로그인후에 이용해주세요");
+	        location.href="main.jsp";
+		<%
+		}
+		else
+		{	
+			pageContext.forward("info_modify.jsp");
+		}
+	}
+	else if(action.equals("info_update"))
+	{
+		String[] before_info = request.getParameterValues("before_info");
+		String id = (String)session.getAttribute("id");
+		db.info_update(data_get_set, before_info, id);
 	}
 	else if(action.equals("load_info"))
 	{
@@ -180,16 +201,6 @@ response.setContentType("text/html;charset=UTF-8");
 		db.delete_picture(data_get_set, cnt);
 		%>
 		location.href="controller.jsp?&action=load_picture_board";<%
-	}
-	else if(action.equals("load_seminar_board"))
-	{
-		String year=request.getParameter("year");
-		pageContext.forward("seminar_board.jsp");
-	}
-	else if(action.equals("load_data_board"))
-	{
-		String Type=request.getParameter("type");
-		pageContext.forward("data_board.jsp");
 	}
 	else if(action.equals("picture_upload"))
 	{

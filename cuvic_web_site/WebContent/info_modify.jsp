@@ -76,7 +76,28 @@ response.setContentType("text/html;charset=UTF-8");
 			}
   			
     	}
-        %>
+		String[] user_info = db.load_myinfo((String)session.getAttribute("id"));
+		request.setAttribute("user_info", user_info);
+    	%>
+    	document.getElementById("name").value = "<%=user_info[0]%>";
+    	if("<%=user_info[1]%>" == "m")
+ 	   		document.getElementsByName("gender")[0].checked = true;
+    	else
+ 	   		document.getElementsByName("gender")[1].checked = true;
+    	document.getElementById("phone").value = "<%=user_info[2]%>";
+    	document.getElementById("Email").value = "<%=user_info[3]%>".split("@")[0];
+    	document.getElementById("Addr").value = "<%=user_info[3]%>".split("@")[1];
+    	document.getElementById("birthday").value = "<%=user_info[4]%>";
+    	document.getElementsByName("work_place")[0].value = "<%=user_info[5]%>";
+    	$("#now_img").append("<span style='margin-right:50px;float:right;text-align:center'><p>현재사진</p><img src='user_img/<%=user_info[6]%>' style='width:200px;'><span>");
+    	document.getElementById("now_img_name").value = "<%=user_info[6]%>";
+    	document.getElementById("comment").value = "<%=user_info[7]%>";
+    	<%
+    	for(String info : user_info)
+    	{
+    		%>$("#modify").append("<input type='hidden' name ='before_info' value='<%=info%>'>");<%	
+    	}
+    	%>
     });
     
     function check(type){
@@ -96,32 +117,6 @@ response.setContentType("text/html;charset=UTF-8");
 		}
 	}
    	var id_state=false,pw_state=false;
-	function id_check()
-   	{
-   		var id = document.getElementsByName("id")[0].value;
-   		if(id.length < 5 || id.length > 10)
-   		{
-   			alert("아이디는 5 ~ 10 자리입니다");
- 			return;
-   		}
-   		for(var i = 0 ; i < id.length ; i++){
-	   		if( (id[i] < 'A' || id[i] > 'Z') && (id[i] < 'a' || id[i] > 'z') && (id[i] < '0' || id[i] > '9') )
-				{
-					alert("아이디는 알파벳과 숫자만 가능합니다.");
-					return;
-				}
-   		}
-   		if(id == null || id.length < 1)
-		{
-			alert("아이디를 입력하세요");
-		}
-		else
-		{
-			document.getElementById("if").src="controller.jsp?action=IdCheck&id="+id;
-   	
-		}
-   		id_state=true;
-   	}
    	function pw_check(){
  		var password = document.getElementsByName("password")[0].value;
  		if(password.length < 5 || password.length > 15)
@@ -139,29 +134,10 @@ response.setContentType("text/html;charset=UTF-8");
  		pw_state=tre=true;
    	}
    	function SB(){
-   		var type=['id', 'password1', 'password2', 'name', 'phone', 'club_num'];
-   		var name=['아이디', '비밀번호', '비밀번호', '이름', '핸드폰 번호', '동아리 기수'];
-   		
-   		if(id_state == false)
-		{
-			alert("아이디 중복체크를 하세요.");
-			return;
-		}
    		if(document.getElementById("comment").value.length > 100){
    			alert("100자까지 입력 가능합니다.");
    			return;
    		}
-
-   		for(var i = 0 ; i < 6 ; i++)
-   		{
-   			if(document.getElementById(type[i]).value == '')
-   			{
-   				alert(name[i]+'를 입력하세요.');
-				location.href='#'+type[i];
-				return;
-   			}
-   		}
-		document.getElementsByName("user_id")[0].value = document.getElementsByName("id")[0].value
 		if(document.getElementsByName("gender")[0].checked)
 		{
 			document.getElementsByName("user_gender")[0].value = "m";
@@ -171,8 +147,8 @@ response.setContentType("text/html;charset=UTF-8");
 			document.getElementsByName("user_gender")[0].value = "w";
 		}
 		document.getElementById("email").value = document.getElementById("Email").value + "@" + document.getElementById("Addr").value;
-		document.getElementById("nick_name").value = document.getElementById("club_num").value+"기"+document.getElementById("name").value;
-   		document.getElementById("sign").submit();
+		document.getElementById("default_img").value = document.getElementById("img_state").checked;
+		document.getElementById("modify").submit();
    		document.getElementById("img").submit();
    	}
    	function direct_input()
@@ -233,27 +209,20 @@ response.setContentType("text/html;charset=UTF-8");
 				</div>
 			</div>
 			<div id="contents" style="height: 880px;">
-				<p>* 필수 입력사항</p>
-				<form method="post" action="controller.jsp" id="sign"  target="if" >
-					<input type="hidden" name="action" value="sign_up">
+				<form method="post" action="controller.jsp" id="modify"  target="if" >
+					<input type="hidden" name="action" value="info_update">
 					<input type="hidden" name="nick_name" id="nick_name" value="">
 					<span>
-						<p>*아이디</p>
-						<input type="text" id="id" name="id" placeholder="아이디" required>
-						<input type="button" value="중복체크" onclick="id_check()">
+						<span>비밀번호 : </span><input type="password" name="password" id="password1" placeholder="비밀번호" onchange="pw_check()">
+						<span>비밀번호 확인 : </span><input type="password" placeholder="비밀번호 확인" id="password2" onchange="check('pw')"></span>
 						<p>5~15자, 알파벳, 숫자 가능</p>
 					</span>
-					<span>
-						<span>*비밀번호 : </span><input type="password" name="password" id="password1" placeholder="비밀번호" onchange="pw_check()" required>
-						<span>*비밀번호 확인 : </span><input type="password" placeholder="비밀번호 확인" id="password2" onchange="check('pw')" required></span>
-						<p>5~15자, 알파벳, 숫자 가능</p>
-					</span>
-					<p>*이름</p>
-					<input type="text" name="name" id="name" placeholder="이름"required><br><br>
+					<p>이름</p>
+					<input type="text" name="name" id="name" placeholder="이름"><br><br>
 					<lable id="_gender" style="margin-left:30px;">남자</lable><input type="radio" name="gender" value="m" checked="checked">
 					<lable style="margin-left:30px;">여자</lable><input type="radio" name="gender" value="w">
-					<p>*핸드폰 번호</p>
-					<input id="phone" type="text"name="phone_num" placeholder="핸드폰 번호" required>
+					<p>핸드폰 번호</p>
+					<input id="phone" type="text"name="phone_num" placeholder="핸드폰 번호">
 					<p>이메일</p>
 					<input type="text" id="Email" placeholder="이메일">@
 					<select id="Addr">
@@ -266,36 +235,27 @@ response.setContentType("text/html;charset=UTF-8");
 					<input id="email_address" type="text" style="display:none">				
 					<p>생년월일</p>
 					<input type="text" id="birthday" name="birth">
-					<p>*동아리 기수</p>
-					<input type="number" name="club_num" id="club_num" placeholder="동아리 기수" required><br><br>
 					<p>근무지</p>
 					<input type="text" name="work_place" placeholder="근무지"><br><br>
 					<textarea cols="60" rows="5" name="comment" id="comment" style="resize:none;"></textarea>
-					<hr style="border:1px solid black;" required><br>
+					<hr style="border:1px solid black;"><br>
 				</form>
+							<div id="now_img" style="float:right;">
+			</div>
 			<form action="fileupload.jsp" method="post" enctype="Multipart/form-data" id="img">
-				<input type="hidden" name="user_id" value="">
+				<input type="hidden" name="user_id" value="<%=(String)session.getAttribute("id")%>">
 				<input type="hidden" name="user_gender" value="">
-				프로필 사진 : <input type="file" name="fileName1"  accept="image/*">
+				<input type="hidden" name="now_img_name" id="now_img_name" value="">
+				<input type="hidden" name="default_img" id="default_img" value="">
+				<p>프로필 사진</p>
+				<label>기본이미지로 변경</label><input type="checkbox" id="img_state">
+				<input type="file" name="fileName1"  accept="image/*">
 			</form>
-					<input type="button" style="float: left; width:45%; margin-top:5px;" onclick="SB()" value="회원가입">
+					<input type="button" style="float: left; width:45%; margin-top:5px;" onclick="SB()" value="수정">
 					<input type="button" onclick="location.href='main.jsp'" value="취소">
 		</div>
 	  		<iframe name="if" id="if" style="width: 0px;height: 0px;border: 0px;"></iframe>
-	  			  		<div id="login_before" style="padding: 5px;">
-				<h1>Login</h1>
-				<form method="post" action="controller.jsp">
-					<input type="hidden" name="action" value="login">
-					<div style="float: left;">
-						<input type="text" name="id" placeholder="아이디" style="margin-bottom: 17px;" size="15"><br>
-						<input type="password" name="password" placeholder="비밀번호" size="15">
-					</div>
-					<button name="login" style="float: right; width:100px; height:69px;">Login</button>
-					<input type="button" style="float: left; width:45%; margin-top:5px;" onclick="location.href='sign_up.jsp'" value="회원가입">
-					<button style="width:45%; float:right; margin-top:5px;" onclick="window.open('main.jsp','아이디/비번찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">회원정보 찾기</button>
-				</form>
-	  		</div>
-	  		<div id="login_after" style="padding: 5px; visibility:hidden; display:none;">
+	  		<div id="login_after" style="padding: 5px;">
 				<form method="post" action="controller.jsp">
 					<h1 style="display:inline-block; margin-top:30%;"><%=session.getAttribute("nick_name") %></h1>
 					<input type="hidden" name="action" value="logout">
